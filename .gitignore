@@ -1,0 +1,30 @@
+# Sensível — NUNCA versionar
+.env
+.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Django
+*.log
+staticfiles/
+media/
+db.sqlite3
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

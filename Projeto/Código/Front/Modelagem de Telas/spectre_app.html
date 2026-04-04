@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPECTRE — Sistema</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0E1117;--ink2:#1C2333;--slate:#4A5568;--muted:#8896A7;
+  --line:#DDE3EC;--bg:#F7F9FC;--white:#FFFFFF;
+  --blue:#1A4DC2;--blue-lt:#EEF3FC;--teal:#097D78;--teal-lt:#EEF7F6;
+  --red:#C0392B;--red-lt:#FDF0EF;--gold:#B7891A;--gold-lt:#FEF9EC;
+  --green:#1E7E4A;--green-lt:#EDFAF3;
+  --sidebar-w:220px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;}
+select,input,textarea{font-family:'DM Sans',sans-serif;}
+
+/* ── SCREENS ── */
+.screen{display:none;}
+.screen.active{display:flex;min-height:100vh;}
+
+/* ══ LOGIN ════════════════════════════════════════════════════ */
+#s-login{display:grid;grid-template-columns:1fr 1fr;}
+.panel-left{
+  background:var(--ink);padding:56px 64px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.panel-left::before{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg width='30' height='30' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='%23ffffff' opacity='0.04'/%3E%3C/svg%3E");
+  background-size:30px 30px;
+}
+.pl-top{position:relative;}
+.brand{display:flex;align-items:center;gap:14px;margin-bottom:64px;}
+.brand-mark{
+  width:38px;height:38px;border:2px solid rgba(255,255,255,0.15);
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:rgba(255,255,255,0.9);
+}
+.brand-name{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;letter-spacing:4px;color:rgba(255,255,255,0.5);text-transform:uppercase;}
+.tagline{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;line-height:1.2;color:var(--white);margin-bottom:24px;letter-spacing:-0.5px;}
+.tagline em{font-style:italic;color:rgba(255,255,255,0.4);}
+.tagline-sub{font-size:14px;line-height:1.7;color:rgba(255,255,255,0.38);max-width:360px;font-weight:300;}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.06);border-radius:12px;overflow:hidden;}
+.metric{background:rgba(255,255,255,0.02);padding:20px 24px;}
+.metric-val{font-family:'DM Mono',monospace;font-size:22px;color:rgba(255,255,255,0.75);margin-bottom:4px;letter-spacing:-0.5px;}
+.metric-label{font-size:10px;color:rgba(255,255,255,0.25);letter-spacing:0.5px;text-transform:uppercase;}
+.pl-bottom{position:relative;font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.18);letter-spacing:1px;}
+.panel-right{background:var(--white);padding:56px 64px;display:flex;flex-direction:column;justify-content:center;}
+.form-header{margin-bottom:40px;}
+.form-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:10px;}
+.form-title{font-size:26px;font-weight:500;color:var(--ink);letter-spacing:-0.5px;line-height:1.2;}
+.form-title span{color:var(--muted);font-weight:300;}
+.form-spectre{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;letter-spacing:6px;color:var(--ink);margin-bottom:20px;}
+.sep{display:flex;align-items:center;gap:12px;margin:32px 0;}
+.sep-line{flex:1;height:1px;background:var(--line);}
+.sep-text{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;}
+.field{margin-bottom:20px;}
+.field-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;}
+.field-label span{font-size:12px;font-weight:500;letter-spacing:0.3px;color:var(--slate);}
+.field-label a{font-size:11px;color:var(--blue);text-decoration:none;opacity:0.7;}
+.input-wrap{position:relative;}
+.input-wrap input{
+  width:100%;height:46px;border:1.5px solid var(--line);border-radius:8px;
+  padding:0 44px 0 14px;font-size:14px;color:var(--ink);background:var(--white);
+  outline:none;transition:border-color 0.15s,box-shadow 0.15s;
+}
+.input-wrap input::placeholder{color:#BCC5D0;}
+.input-wrap input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,77,194,0.08);}
+.field.has-error input{border-color:var(--red);}
+.field-error{display:none;font-size:11.5px;color:var(--red);margin-top:5px;}
+.field.has-error .field-error{display:block;}
+.eye-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;padding:0;color:#BCC5D0;display:flex;align-items:center;transition:color 0.2s;}
+.eye-btn:hover{color:var(--slate);}
+.remember{display:flex;align-items:center;gap:8px;margin-bottom:28px;cursor:pointer;}
+.remember input{width:15px;height:15px;accent-color:var(--blue);}
+.remember span{font-size:12.5px;color:var(--slate);}
+.btn-login{
+  width:100%;height:46px;background:var(--ink);color:var(--white);
+  border:none;border-radius:8px;font-size:14px;font-weight:500;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background 0.15s,transform 0.1s;position:relative;overflow:hidden;
+}
+.btn-login:hover{background:var(--ink2);}
+.btn-login:active{transform:scale(0.99);}
+.btn-login.loading .btn-text,.btn-login.loading .btn-arrow{opacity:0;}
+.btn-spinner{position:absolute;width:18px;height:18px;border:2px solid rgba(255,255,255,0.2);border-top-color:white;border-radius:50%;animation:spin 0.6s linear infinite;display:none;}
+.btn-login.loading .btn-spinner{display:block;}
+.btn-login.loading{pointer-events:none;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.alert{display:none;margin-top:16px;padding:11px 14px;border-radius:7px;font-size:12.5px;line-height:1.5;}
+.alert.error{background:#FDF0EF;border:1px solid #F5C6C0;color:var(--red);}
+.alert.success{background:#EEF7F6;border:1px solid #B0D9D6;color:var(--teal);}
+.alert.show{display:block;}
+.form-footer{margin-top:40px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+.form-footer-left{font-size:11.5px;color:var(--muted);}
+.version-tag{font-family:'DM Mono',monospace;font-size:10px;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:3px 8px;color:var(--muted);}
+
+/* ══ APP SHELL ════════════════════════════════════════════════ */
+#s-app{flex-direction:row;}
+.sidebar{
+  width:var(--sidebar-w);min-height:100vh;background:var(--ink);
+  display:flex;flex-direction:column;flex-shrink:0;
+  position:fixed;top:0;left:0;bottom:0;z-index:100;
+}
+.sidebar-brand{padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;}
+.sb-mark{width:32px;height:32px;border:1.5px solid rgba(255,255,255,0.18);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;color:rgba(255,255,255,0.85);}
+.sb-name{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.45);text-transform:uppercase;}
+.sidebar-nav{padding:12px 0;flex:1;overflow-y:auto;}
+.nav-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:10px 18px 5px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 18px;font-size:13px;color:rgba(255,255,255,0.45);cursor:pointer;transition:all 0.15s;border-left:2px solid transparent;user-select:none;}
+.nav-item:hover{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.75);}
+.nav-item.active{background:rgba(255,255,255,0.06);color:var(--white);border-left-color:var(--blue);font-weight:500;}
+.nav-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
+.sidebar-footer{padding:14px 18px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;}
+.avatar{width:30px;height:30px;background:rgba(255,255,255,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,0.6);font-weight:500;}
+.user-name{font-size:12px;font-weight:500;color:rgba(255,255,255,0.7);}
+.user-role{font-size:10px;color:rgba(255,255,255,0.25);font-family:'DM Mono',monospace;}
+.main-area{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column;}
+.topbar{height:54px;background:var(--white);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 26px;gap:12px;position:sticky;top:0;z-index:50;}
+.topbar-title{font-size:15px;font-weight:500;color:var(--ink);flex:1;}
+.topbar-title span{color:var(--muted);font-weight:300;font-size:13px;margin-left:6px;}
+.page-content{padding:22px 26px;flex:1;}
+
+/* ══ SHARED COMPONENTS ════════════════════════════════════════ */
+.btn-primary{height:36px;padding:0 16px;background:var(--ink);color:var(--white);border:none;border-radius:8px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;transition:all 0.15s;}
+.btn-primary:hover{background:var(--ink2);}
+.btn-outline{height:36px;padding:0 14px;background:transparent;color:var(--slate);border:1.5px solid var(--line);border-radius:8px;font-size:13px;display:flex;align-items:center;gap:6px;transition:all 0.15s;}
+.btn-outline:hover{border-color:var(--slate);}
+.btn-sm{height:30px;padding:0 12px;border-radius:6px;font-size:12px;font-weight:500;border:none;display:flex;align-items:center;gap:5px;transition:all 0.15s;}
+.card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:18px;}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:10.5px;font-weight:600;letter-spacing:0.3px;}
+.badge-green{background:var(--green-lt);color:var(--green);}
+.badge-gold{background:var(--gold-lt);color:var(--gold);}
+.badge-red{background:var(--red-lt);color:var(--red);}
+.badge-blue{background:var(--blue-lt);color:var(--blue);}
+.badge-gray{background:var(--bg);color:var(--slate);}
+.filter-bar{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.filter-select{height:34px;padding:0 10px;border:1.5px solid var(--line);border-radius:8px;font-size:12.5px;color:var(--slate);background:var(--white);outline:none;cursor:pointer;transition:border-color 0.15s;}
+.filter-select:focus{border-color:var(--blue);}
+.filter-label{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.5px;}
+.tbl-wrap{background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;padding:10px 18px;font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--muted);background:var(--bg);border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none;}
+th:hover{color:var(--ink);}
+th .sort-arrow{margin-left:4px;opacity:0.4;}
+th.sorted .sort-arrow{opacity:1;color:var(--blue);}
+td{padding:11px 18px;font-size:13px;color:var(--slate);border-bottom:1px solid var(--line);}
+td.td-main{color:var(--ink);font-weight:500;}
+td.td-mono{font-family:'DM Mono',monospace;font-size:12px;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#FAFBFC;}
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-top:1px solid var(--line);}
+.page-info{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);}
+.page-btns{display:flex;gap:4px;}
+.page-btn{height:28px;min-width:28px;padding:0 8px;border:1.5px solid var(--line);border-radius:6px;font-size:12px;color:var(--slate);background:var(--white);transition:all 0.15s;}
+.page-btn:hover:not(:disabled){border-color:var(--blue);color:var(--blue);}
+.page-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.page-btn:disabled{opacity:0.4;cursor:not-allowed;}
+
+/* ══ DASHBOARD ════════════════════════════════════════════════ */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+.kpi-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:18px;}
+.kpi-label{font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.kpi-value{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--ink);margin-bottom:4px;letter-spacing:-0.5px;}
+.kpi-delta{font-size:11px;color:var(--muted);}
+.kpi-delta.up{color:var(--teal);}
+.kpi-delta.down{color:var(--red);}
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;margin-top:10px;}
+.prog-text{font-size:10.5px;color:var(--muted);}
+.prog-pct{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--slate);}
+.prog-bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:2px;background:var(--blue);}
+.charts-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;margin-bottom:18px;}
+.chart-box{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:18px;}
+.chart-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.chart-title{font-size:13px;font-weight:500;color:var(--ink);}
+.legend{display:flex;gap:12px;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
+.legend-dot{width:8px;height:8px;border-radius:2px;}
+
+/* ══ ORÇAMENTOS (PROJECTS) ════════════════════════════════════ */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.proj-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:20px;transition:box-shadow 0.2s;}
+.proj-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.07);}
+.proj-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line);}
+.proj-name{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.proj-org{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);}
+.proj-stat{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);}
+.proj-stat:last-of-type{border-bottom:none;}
+.proj-stat-label{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;}
+.proj-stat-val{font-size:13px;font-weight:500;color:var(--ink);}
+.proj-actions{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);}
+.proj-actions button{flex:1;height:34px;border-radius:8px;font-size:12.5px;font-weight:500;transition:all 0.15s;}
+
+/* ══ MODAL (project detail) ═══════════════════════════════════ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--white);border-radius:16px;width:700px;max-width:95vw;max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+.modal-hdr{padding:22px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-size:16px;font-weight:600;color:var(--ink);}
+.modal-close{background:none;border:none;font-size:20px;color:var(--muted);padding:0;line-height:1;}
+.modal-close:hover{color:var(--ink);}
+.modal-body{padding:22px 24px;}
+.detail-table{width:100%;border-collapse:collapse;margin-top:12px;}
+.detail-table th{text-align:left;padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--muted);background:var(--bg);border-bottom:1px solid var(--line);}
+.detail-table td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--line);}
+.detail-table tr:last-child td{border-bottom:none;}
+
+/* ══ NEW EXPENSE FORM ═════════════════════════════════════════ */
+.form-box{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:24px;}
+.form-section{margin-bottom:20px;}
+.form-section label{display:block;font-size:12px;font-weight:500;color:var(--slate);margin-bottom:6px;}
+.form-input{width:100%;height:42px;border:1.5px solid var(--line);border-radius:8px;padding:0 14px;font-size:14px;color:var(--ink);outline:none;transition:all 0.15s;background:var(--white);}
+.form-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,77,194,0.08);}
+.form-textarea{width:100%;border:1.5px solid var(--line);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--ink);outline:none;resize:none;transition:all 0.15s;}
+.form-textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,77,194,0.08);}
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.type-btn{padding:14px;border:2px solid var(--line);border-radius:10px;text-align:left;background:var(--white);transition:all 0.15s;}
+.type-btn.active{border-color:var(--blue);background:var(--blue-lt);}
+.type-btn:hover:not(.active){border-color:rgba(26,77,194,0.4);}
+.type-btn-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.type-btn-sub{font-size:11px;color:var(--muted);}
+.upload-zone{border:2px dashed var(--line);border-radius:10px;padding:28px;text-align:center;transition:border-color 0.15s;cursor:pointer;}
+.upload-zone:hover{border-color:var(--blue);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-actions{display:flex;gap:10px;padding-top:18px;border-top:1px solid var(--line);}
+.back-btn{display:flex;align-items:center;gap:6px;color:var(--slate);font-size:13px;margin-bottom:16px;background:none;border:none;padding:0;transition:color 0.15s;}
+.back-btn:hover{color:var(--blue);}
+
+/* ══ CONFIGURAÇÕES ════════════════════════════════════════════ */
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);margin-bottom:20px;}
+.tab-btn{padding:0 4px 14px;font-size:14px;font-weight:500;color:var(--muted);border:none;border-bottom:2px solid transparent;background:none;transition:all 0.15s;display:flex;align-items:center;gap:7px;}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
+.tab-btn:hover:not(.active){color:var(--slate);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.cat-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:18px;}
+.cat-card-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
+.cat-name{font-size:14px;font-weight:600;color:var(--ink);}
+.cat-type{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);}
+.cat-actions{display:flex;gap:6px;padding-top:12px;border-top:1px solid var(--line);}
+
+/* ══ UTILS ════════════════════════════════════════════════════ */
+.flex{display:flex;}.items-center{align-items:center;}.gap-2{gap:8px;}.gap-3{gap:12px;}.gap-4{gap:16px;}.justify-between{justify-content:space-between;}.justify-end{justify-content:flex-end;}.mb-4{margin-bottom:16px;}.mb-3{margin-bottom:12px;}.mt-3{margin-top:12px;}.flex-1{flex:1;}.ml-auto{margin-left:auto;}
+.text-sm{font-size:13px;}.text-xs{font-size:11px;}.text-muted{color:var(--muted);}.text-ink{color:var(--ink);}.font-mono{font-family:'DM Mono',monospace;}.font-500{font-weight:500;}.font-600{font-weight:600;}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LOGIN SCREEN ══════════════ -->
+<div class="screen active" id="s-login">
+  <div class="panel-left">
+    <div class="pl-top">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-name">Spectre</div>
+      </div>
+      <div class="tagline">Controle<br>financeiro<br><em>sem atrito.</em></div>
+      <div class="tagline-sub">Gerencie custeio e capital de projetos de pesquisa com rastreabilidade completa e auditoria automática.</div>
+    </div>
+    <div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-val">10</div><div class="metric-label">Tabelas</div></div>
+        <div class="metric"><div class="metric-val">18</div><div class="metric-label">Triggers</div></div>
+        <div class="metric"><div class="metric-val">JWT</div><div class="metric-label">Autenticação</div></div>
+        <div class="metric"><div class="metric-val">REST</div><div class="metric-label">API</div></div>
+      </div>
+    </div>
+    <div class="pl-bottom">UNISC · PI MÓDULO III A · 2026</div>
+  </div>
+  <div class="panel-right">
+    <div style="max-width:400px;width:100%;">
+      <div class="form-header">
+        <div class="form-spectre">SPECTRE</div>
+        <div class="form-eyebrow">Acesso ao sistema</div>
+        <div class="form-title">Bem-vindo de volta<br><span>informe suas credenciais</span></div>
+      </div>
+      <div class="sep"><div class="sep-line"></div><div class="sep-text">identificação</div><div class="sep-line"></div></div>
+      <div class="field" id="fl-login">
+        <div class="field-label"><span>Login</span></div>
+        <div class="input-wrap">
+          <input type="text" id="inp-login" placeholder="Seu nome de login" autocomplete="username" autofocus>
+        </div>
+        <div class="field-error">Campo obrigatório.</div>
+      </div>
+      <div class="field" id="fl-senha">
+        <div class="field-label"><span>Senha</span><a href="#">Esqueceu?</a></div>
+        <div class="input-wrap">
+          <input type="password" id="inp-senha" placeholder="••••••••" autocomplete="current-password">
+          <button class="eye-btn" onclick="toggleEye()" type="button">
+            <svg id="eye-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="field-error">Campo obrigatório.</div>
+      </div>
+      <label class="remember"><input type="checkbox" id="chk-rem"><span>Manter conectado</span></label>
+      <button class="btn-login" id="btnLogin" onclick="doLogin()">
+        <span class="btn-text">Entrar no sistema</span>
+        <span class="btn-arrow" style="font-size:16px;">→</span>
+        <div class="btn-spinner"></div>
+      </button>
+      <div class="alert error" id="alertErr">Credenciais inválidas. Verifique seu login e senha.</div>
+      <div class="alert success" id="alertOk">✓ Autenticado — redirecionando para o dashboard…</div>
+      <div class="form-footer">
+        <div class="form-footer-left">Projeto Integrador · UNISC 2026</div>
+        <div class="version-tag">v1.0-dev</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ APP SHELL ══════════════ -->
+<div class="screen" id="s-app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sb-mark">S</div>
+      <div class="sb-name">Spectre</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Principal</div>
+      <div class="nav-item active" onclick="goTo('dashboard')"><span class="nav-icon">▦</span> Dashboard</div>
+      <div class="nav-item" onclick="goTo('lancamentos')"><span class="nav-icon">↗</span> Lançamentos</div>
+      <div class="nav-item" onclick="goTo('orcamentos')"><span class="nav-icon">◈</span> Orçamentos</div>
+      <div class="nav-label">Detalhes</div>
+      <div class="nav-item" onclick="goTo('lancamentos','Transporte')"><span class="nav-icon">✈</span> Transporte</div>
+      <div class="nav-item" onclick="goTo('lancamentos','Diárias')"><span class="nav-icon">☀</span> Diárias</div>
+      <div class="nav-item" onclick="goTo('lancamentos','Consumo')"><span class="nav-icon">🧪</span> Consumo</div>
+      <div class="nav-item" onclick="goTo('lancamentos','Patrimônio')"><span class="nav-icon">🖥</span> Patrimônio</div>
+      <div class="nav-item" onclick="goTo('lancamentos','Serviços')"><span class="nav-icon">✎</span> Serviços</div>
+      <div class="nav-label">Sistema</div>
+      <div class="nav-item" onclick="goTo('historico')"><span class="nav-icon">⏱</span> Histórico</div>
+      <div class="nav-item" onclick="goTo('configuracoes')"><span class="nav-icon">⚙</span> Configurações</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="avatar">JS</div>
+      <div>
+        <div class="user-name">Jéferson Silva</div>
+        <div class="user-role">Desenvolvimento</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-area">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">Dashboard <span id="page-subtitle">/ Visão geral do projeto</span></div>
+      <div class="flex gap-2" id="topbar-actions">
+        <button class="btn-outline" onclick="alert('Exportando CSV...')">↓ Exportar CSV</button>
+        <button class="btn-primary" onclick="goTo('novo-lancamento')">+ Novo Lançamento</button>
+      </div>
+    </div>
+    <div class="page-content" id="page-content"></div>
+  </main>
+</div>
+
+<!-- PROJECT DETAIL MODAL -->
+<div class="modal-overlay" id="modal-project">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div>
+        <div class="modal-title" id="modal-proj-title">Detalhes do Projeto</div>
+        <div class="text-xs text-muted font-mono mt-1" id="modal-proj-org"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="modal-proj-body"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ DATA ══════════════════════════════════════════════════════
+const EDITAIS = ['Todos os editais','Fapergs 2026 — Edital 01/2026','CNPq 2025 — Chamada 12/2025','CAPES 2026 — Edital 03/2026'];
+const CATEGORIAS = ['Todas as categorias','Transporte','Diárias','Consumo','Patrimônio','Serviços'];
+const MESES = ['Todos os meses','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const ANOS = ['2024','2025','2026','2027'];
+
+const PROJETOS = [
+  {id:1,nome:'Fapergs 2026 — Edital 01/2026',org:'Fapergs',edital:'01/2026',ano:2026,valor:48500,gasto:29870,status:'Em andamento',coord:'Jéferson C. Silva',periodo:'Jan/2026 – Dez/2026'},
+  {id:2,nome:'CNPq 2025 — Chamada 12/2025',org:'CNPq',edital:'12/2025',ano:2025,valor:95000,gasto:61200,status:'Em andamento',coord:'Erick Meurer',periodo:'Mar/2025 – Fev/2027'},
+  {id:3,nome:'CAPES 2026 — Edital 03/2026',org:'CAPES',edital:'03/2026',ano:2026,valor:120000,gasto:18000,status:'Iniciando',coord:'Jéferson C. Silva',periodo:'Jan/2026 – Dez/2028'},
+];
+
+const CATEG_DETAIL = [
+  {cat:'Transporte',orcado:12000,realizado:8900},
+  {cat:'Diárias',orcado:8000,realizado:5600},
+  {cat:'Consumo',orcado:10000,realizado:7200},
+  {cat:'Patrimônio',orcado:15000,realizado:6400},
+  {cat:'Serviços',orcado:18000,realizado:14200},
+];
+
+const LANCAMENTOS_BASE = [
+  {id:47,data:'14/03/2026',edital:'Fapergs 2026 — Edital 01/2026',cat:'Transporte',desc:'Passagem aérea — Congresso SBRC São Paulo',valor:1240,status:'Aprovado'},
+  {id:46,data:'12/03/2026',edital:'Fapergs 2026 — Edital 01/2026',cat:'Patrimônio',desc:'Notebook Dell Inspiron 15 — Laboratório',valor:4890,status:'Aprovado'},
+  {id:45,data:'10/03/2026',edital:'CNPq 2025 — Chamada 12/2025',cat:'Serviços',desc:'Revisão de texto — Artigo WSCAD 2026',valor:650,status:'Em Análise'},
+  {id:44,data:'08/03/2026',edital:'Fapergs 2026 — Edital 01/2026',cat:'Diárias',desc:'Diárias Porto Alegre — 3 dias',valor:870,status:'Aprovado'},
+  {id:43,data:'05/03/2026',edital:'Fapergs 2026 — Edital 01/2026',cat:'Consumo',desc:'Resmas de papel A4 e toner HP',valor:318,status:'Aprovado'},
+  {id:42,data:'03/03/2026',edital:'CNPq 2025 — Chamada 12/2025',cat:'Serviços',desc:'Consultoria técnica — Análise de dados',valor:3200,status:'Aprovado'},
+  {id:41,data:'28/02/2026',edital:'CAPES 2026 — Edital 03/2026',cat:'Consumo',desc:'Reagentes químicos para pesquisa',valor:2100,status:'Em Análise'},
+  {id:40,data:'25/02/2026',edital:'CNPq 2025 — Chamada 12/2025',cat:'Transporte',desc:'Combustível — Viagem Santa Cruz do Sul',valor:180,status:'Aprovado'},
+  {id:39,data:'22/02/2026',edital:'Fapergs 2026 — Edital 01/2026',cat:'Patrimônio',desc:'Monitor LG UltraWide 29" — Laboratório',valor:2200,status:'Aprovado'},
+  {id:38,data:'18/02/2026',edital:'CAPES 2026 — Edital 03/2026',cat:'Serviços',desc:'Tradução de artigo — Inglês técnico',valor:800,status:'Rejeitado'},
+  {id:37,data:'15/02/2026',edital:'Fapergs 2026 — Edital 01/2026',cat:'Diárias',desc:'Diárias São Paulo — SBBD 2026',valor:1200,status:'Aprovado'},
+  {id:36,data:'10/02/2026',edital:'CNPq 2025 — Chamada 12/2025',cat:'Consumo',desc:'Material de laboratório — Vidraria',valor:950,status:'Aprovado'},
+  {id:35,data:'05/02/2026',edital:'Fapergs 2026 — Edital 01/2026',cat:'Transporte',desc:'Passagem ônibus — Caxias do Sul',valor:85,status:'Aprovado'},
+  {id:34,data:'28/01/2026',edital:'CAPES 2026 — Edital 03/2026',cat:'Patrimônio',desc:'Projetor Epson PowerLite',valor:3800,status:'Em Análise'},
+  {id:33,data:'20/01/2026',edital:'CNPq 2025 — Chamada 12/2025',cat:'Serviços',desc:'Desenvolvimento de software — Módulo de relatórios',valor:5500,status:'Aprovado'},
+];
+
+const USERS = [
+  {id:1,nome:'Jéferson C. Silva',email:'jeferson@spectre.com',papel:'Administrador',status:'Ativo'},
+  {id:2,nome:'Erick Meurer',email:'erick@spectre.com',papel:'Pesquisador',status:'Ativo'},
+];
+const CATEGORIAS_BD = [
+  {id:1,nome:'Materiais de Consumo',tipo:'CUSTEIO',lanc:15,icon:'🧪'},
+  {id:2,nome:'Serviços de Terceiros',tipo:'CUSTEIO',lanc:10,icon:'✎'},
+  {id:3,nome:'Materiais Permanentes (Patrimônio)',tipo:'CAPITAL',lanc:8,icon:'🖥'},
+  {id:4,nome:'Diárias',tipo:'CUSTEIO',lanc:12,icon:'☀'},
+  {id:5,nome:'Transporte',tipo:'CUSTEIO',lanc:9,icon:'✈'},
+];
+
+// ══ STATE ═════════════════════════════════════════════════════
+let currentPage = 'dashboard';
+let lancState = {filtEdital:'',filtCat:'',filtStatus:'',sortCol:'data',sortDir:'desc',page:1,pageSize:10};
+let chartBar = null, chartDonut = null;
+
+// ══ NAVIGATION ════════════════════════════════════════════════
+function goTo(page, catFilter) {
+  currentPage = page;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const navMap = {
+    'dashboard':'Dashboard','lancamentos':'Lançamentos','orcamentos':'Orçamentos',
+    'configuracoes':'Configurações','historico':'Histórico','novo-lancamento':'Lançamentos'
+  };
+  document.querySelectorAll('.nav-item').forEach(el => {
+    if(el.textContent.trim() === navMap[page]) el.classList.add('active');
+  });
+  if(catFilter) { lancState.filtCat = catFilter; lancState.page = 1; }
+  renderPage();
+}
+
+function renderPage() {
+  const c = document.getElementById('page-content');
+  const title = document.getElementById('page-title');
+  const sub = document.getElementById('page-subtitle');
+  const actions = document.getElementById('topbar-actions');
+
+  const pages = {
+    'dashboard': [renderDashboard, 'Dashboard', '/ Visão geral do projeto', renderTopbarDash],
+    'lancamentos': [renderLancamentos, 'Lançamentos', '/ Todos os registros', renderTopbarLanc],
+    'orcamentos': [renderOrcamentos, 'Orçamentos', '/ Projetos e editais', renderTopbarOrc],
+    'novo-lancamento': [renderNovoLancamento, 'Novo Lançamento', '/ Cadastrar registro', renderTopbarNovo],
+    'configuracoes': [renderConfiguracoes, 'Configurações', '/ Gerenciamento do sistema', renderTopbarConf],
+    'historico': [renderHistorico, 'Histórico', '/ Auditoria de alterações', renderTopbarConf],
+  };
+  const [fn, t, s, actFn] = pages[currentPage] || pages['dashboard'];
+  title.childNodes[0].textContent = t + ' ';
+  sub.textContent = s;
+  actions.innerHTML = '';
+  actFn();
+  c.innerHTML = '';
+  fn(c);
+}
+
+function renderTopbarDash() {
+  const a = document.getElementById('topbar-actions');
+  a.innerHTML = `<button class="btn-outline" onclick="alert('Exportando CSV...')">↓ Exportar CSV</button>
+  <button class="btn-primary" onclick="goTo('novo-lancamento')">+ Novo Lançamento</button>`;
+}
+function renderTopbarLanc() {
+  const a = document.getElementById('topbar-actions');
+  a.innerHTML = `<button class="btn-outline" onclick="alert('Exportando planilha...')">↓ Exportar planilha</button>
+  <button class="btn-primary" onclick="goTo('novo-lancamento')">+ Novo Lançamento</button>`;
+}
+function renderTopbarOrc() {
+  const a = document.getElementById('topbar-actions');
+  a.innerHTML = `<button class="btn-primary" onclick="alert('Novo projeto...')">+ Novo Projeto</button>`;
+}
+function renderTopbarNovo() {
+  document.getElementById('topbar-actions').innerHTML = '';
+}
+function renderTopbarConf() {
+  document.getElementById('topbar-actions').innerHTML = '';
+}
+
+// ══ DASHBOARD ════════════════════════════════════════════════
+function renderDashboard(c) {
+  const html = `
+  <div class="filter-bar mb-4">
+    <span class="filter-label">Edital:</span>
+    <select class="filter-select" onchange="void(0)">
+      ${EDITAIS.map(e=>`<option>${e}</option>`).join('')}
+    </select>
+    <span class="filter-label" style="margin-left:8px;">Mês:</span>
+    <select class="filter-select">
+      ${MESES.map((m,i)=>`<option ${i===3?'selected':''}>${m}</option>`).join('')}
+    </select>
+    <span class="filter-label">Ano:</span>
+    <select class="filter-select">
+      ${ANOS.map(a=>`<option ${a==='2026'?'selected':''}>${a}</option>`).join('')}
+    </select>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Orçado</div>
+      <div class="kpi-value">R$ 48.500</div>
+      <div class="kpi-delta">Fapergs 2026</div>
+      <div class="prog-row"><span class="prog-text">Executado</span><span class="prog-pct">62%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:62%;"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Realizado</div>
+      <div class="kpi-value">R$ 29.870</div>
+      <div class="kpi-delta up">↑ R$ 4.200 este mês</div>
+      <div class="prog-row"><span class="prog-text">Do orçado</span><span class="prog-pct">62%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:62%;"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Saldo Disponível</div>
+      <div class="kpi-value">R$ 18.630</div>
+      <div class="kpi-delta">38% do orçamento</div>
+      <div class="prog-row"><span class="prog-text">Custeio</span><span class="prog-pct">71%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:71%;background:var(--teal);"></div></div>
+      <div class="prog-row"><span class="prog-text">Capital</span><span class="prog-pct">44%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:44%;background:var(--gold);"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Lançamentos</div>
+      <div class="kpi-value">47</div>
+      <div class="kpi-delta">28 aprovados · 19 em análise</div>
+      <div class="prog-row"><span class="prog-text">Aprovados</span><span class="prog-pct">60%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:60%;background:var(--green);"></div></div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-box">
+      <div class="chart-hdr">
+        <div class="chart-title">Orçado × Realizado por categoria</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--blue);"></div>Orçado</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--teal);"></div>Realizado</div>
+        </div>
+      </div>
+      <canvas id="chartBar" height="160"></canvas>
+    </div>
+    <div class="chart-box">
+      <div class="chart-hdr"><div class="chart-title">Distribuição por tipo</div></div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <canvas id="chartDonut" width="130" height="130" style="flex-shrink:0;"></canvas>
+        <div style="flex:1;">
+          ${CATEG_DETAIL.map(d=>`
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line);">
+            <span class="text-sm">${d.cat}</span>
+            <span class="font-mono text-xs font-500">${Math.round(d.realizado/CATEG_DETAIL.reduce((s,x)=>s+x.realizado,0)*100)}%</span>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div style="padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;">
+      <span class="font-500" style="font-size:13px;">Lançamentos recentes</span>
+      <button class="btn-outline btn-sm" onclick="goTo('lancamentos')">Ver todos →</button>
+    </div>
+    <table>
+      <thead><tr>
+        <th>#</th><th>Descrição</th><th>Categoria</th><th>Data</th><th>Valor</th><th>Status</th>
+      </tr></thead>
+      <tbody>
+        ${LANCAMENTOS_BASE.slice(0,5).map(l=>`<tr>
+          <td class="td-mono text-muted">#${l.id}</td>
+          <td class="td-main">${l.desc}</td>
+          <td><span class="badge badge-blue">${l.cat}</span></td>
+          <td class="td-mono">${l.data}</td>
+          <td class="td-mono font-600">R$ ${l.valor.toLocaleString('pt-BR')},00</td>
+          <td>${badgeStatus(l.status)}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+  c.innerHTML = html;
+
+  // Bar chart
+  const ctxBar = document.getElementById('chartBar').getContext('2d');
+  if(chartBar) chartBar.destroy();
+  chartBar = new Chart(ctxBar, {
+    type:'bar',
+    data:{
+      labels:CATEG_DETAIL.map(d=>d.cat),
+      datasets:[
+        {label:'Orçado',data:CATEG_DETAIL.map(d=>d.orcado),backgroundColor:'rgba(26,77,194,0.8)',borderRadius:3},
+        {label:'Realizado',data:CATEG_DETAIL.map(d=>d.realizado),backgroundColor:'rgba(9,125,120,0.8)',borderRadius:3}
+      ]
+    },
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{callback:v=>'R$'+v/1000+'k'}}}}
+  });
+
+  // Donut chart
+  const ctxD = document.getElementById('chartDonut').getContext('2d');
+  if(chartDonut) chartDonut.destroy();
+  const clrs = ['#1A4DC2','#097D78','#B7891A','#4A5568','#8896A7'];
+  chartDonut = new Chart(ctxD, {
+    type:'doughnut',
+    data:{labels:CATEG_DETAIL.map(d=>d.cat),datasets:[{data:CATEG_DETAIL.map(d=>d.realizado),backgroundColor:clrs,borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:false,cutout:'68%',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.label+': R$'+ctx.raw.toLocaleString('pt-BR')}}}}
+  });
+}
+
+// ══ LANÇAMENTOS ═══════════════════════════════════════════════
+function badgeStatus(s) {
+  const m = {
+    'Aprovado':'badge-green',
+    'Em Análise':'badge-gold',
+    'Rejeitado':'badge-red'
+  };
+  return `<span class="badge ${m[s]||'badge-gray'}">${s}</span>`;
+}
+
+function renderLancamentos(c) {
+  let data = [...LANCAMENTOS_BASE];
+  if(lancState.filtEdital) data = data.filter(l=>l.edital===lancState.filtEdital);
+  if(lancState.filtCat)    data = data.filter(l=>l.cat===lancState.filtCat);
+  if(lancState.filtStatus) data = data.filter(l=>l.status===lancState.filtStatus);
+
+  // Sort
+  data.sort((a,b)=>{
+    let va=a[lancState.sortCol], vb=b[lancState.sortCol];
+    if(lancState.sortCol==='valor'){va=Number(va);vb=Number(vb);}
+    if(lancState.sortCol==='data'){va=va.split('/').reverse().join('');vb=vb.split('/').reverse().join('');}
+    if(va<vb) return lancState.sortDir==='asc'?-1:1;
+    if(va>vb) return lancState.sortDir==='asc'?1:-1;
+    return 0;
+  });
+
+  const total = data.length;
+  const pages = Math.max(1,Math.ceil(total/lancState.pageSize));
+  lancState.page = Math.min(lancState.page, pages);
+  const start = (lancState.page-1)*lancState.pageSize;
+  const pageData = data.slice(start, start+lancState.pageSize);
+
+  const arrow = col => {
+    if(lancState.sortCol!==col) return '<span class="sort-arrow">↕</span>';
+    return `<span class="sort-arrow">${lancState.sortDir==='asc'?'↑':'↓'}</span>`;
+  };
+  const th = (col, label) =>
+    `<th class="${lancState.sortCol===col?'sorted':''}" onclick="sortLanc('${col}')">${label} ${arrow(col)}</th>`;
+
+  c.innerHTML = `
+  <div class="filter-bar">
+    <span class="filter-label">Edital:</span>
+    <select class="filter-select" onchange="lancState.filtEdital=this.value;lancState.page=1;renderPage()">
+      <option value="">Todos os editais</option>
+      ${PROJETOS.map(p=>`<option value="${p.nome}" ${lancState.filtEdital===p.nome?'selected':''}>${p.nome}</option>`).join('')}
+    </select>
+    <span class="filter-label">Categoria:</span>
+    <select class="filter-select" onchange="lancState.filtCat=this.value;lancState.page=1;renderPage()">
+      <option value="">Todas as categorias</option>
+      ${['Transporte','Diárias','Consumo','Patrimônio','Serviços'].map(c=>`<option ${lancState.filtCat===c?'selected':''}>${c}</option>`).join('')}
+    </select>
+    <span class="filter-label">Status:</span>
+    <select class="filter-select" onchange="lancState.filtStatus=this.value;lancState.page=1;renderPage()">
+      <option value="">Todos</option>
+      <option ${lancState.filtStatus==='Aprovado'?'selected':''}>Aprovado</option>
+      <option ${lancState.filtStatus==='Em Análise'?'selected':''}>Em Análise</option>
+      <option ${lancState.filtStatus==='Rejeitado'?'selected':''}>Rejeitado</option>
+    </select>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        ${th('id','#')}${th('data','Data')}${th('edital','Edital')}
+        ${th('cat','Categoria')}${th('desc','Descrição')}
+        ${th('valor','Valor')}${th('status','Status')}
+        <th>Ações</th>
+      </tr></thead>
+      <tbody>
+        ${pageData.length===0?`<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:32px;">Nenhum registro encontrado.</td></tr>`:
+          pageData.map(l=>`<tr>
+            <td class="td-mono text-muted">#${l.id}</td>
+            <td class="td-mono">${l.data}</td>
+            <td class="text-xs" style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${l.edital}">${l.edital.split('—')[0].trim()}</td>
+            <td><span class="badge badge-blue">${l.cat}</span></td>
+            <td class="td-main" style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${l.desc}">${l.desc}</td>
+            <td class="td-mono font-600">R$ ${l.valor.toLocaleString('pt-BR')},00</td>
+            <td>${badgeStatus(l.status)}</td>
+            <td><button class="btn-sm btn-outline" onclick="alert('Ver #${l.id}')">Ver</button></td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+    <div class="pagination">
+      <span class="page-info">Mostrando ${Math.min(start+1,total)}–${Math.min(start+lancState.pageSize,total)} de ${total} resultados</span>
+      <div class="page-btns">
+        <button class="page-btn" onclick="lancState.page--;renderPage()" ${lancState.page<=1?'disabled':''}>← Anterior</button>
+        ${Array.from({length:pages},(_,i)=>i+1).map(p=>`<button class="page-btn ${p===lancState.page?'active':''}" onclick="lancState.page=${p};renderPage()">${p}</button>`).join('')}
+        <button class="page-btn" onclick="lancState.page++;renderPage()" ${lancState.page>=pages?'disabled':''}>Próximo →</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function sortLanc(col) {
+  if(lancState.sortCol===col) lancState.sortDir=lancState.sortDir==='asc'?'desc':'asc';
+  else { lancState.sortCol=col; lancState.sortDir='asc'; }
+  renderPage();
+}
+
+// ══ ORÇAMENTOS ════════════════════════════════════════════════
+function renderOrcamentos(c) {
+  const pct = p => Math.round(p.gasto/p.valor*100);
+  c.innerHTML = `
+  <div class="proj-grid">
+    ${PROJETOS.map(p=>`
+    <div class="proj-card">
+      <div class="proj-hdr">
+        <div>
+          <div class="proj-name">${p.nome}</div>
+          <div class="proj-org">${p.org} · Edital ${p.edital} · ${p.ano}</div>
+        </div>
+        <span class="badge ${p.status==='Em andamento'?'badge-green':p.status==='Iniciando'?'badge-blue':'badge-gold'}">${p.status}</span>
+      </div>
+      <div class="proj-stat"><span class="proj-stat-label">Orçamento total</span><span class="proj-stat-val font-600">R$ ${p.valor.toLocaleString('pt-BR')},00</span></div>
+      <div class="proj-stat"><span class="proj-stat-label">Realizado</span><span class="proj-stat-val">R$ ${p.gasto.toLocaleString('pt-BR')},00</span></div>
+      <div class="proj-stat"><span class="proj-stat-label">Saldo disponível</span><span class="proj-stat-val" style="color:var(--teal);">R$ ${(p.valor-p.gasto).toLocaleString('pt-BR')},00</span></div>
+      <div class="proj-stat"><span class="proj-stat-label">Período</span><span class="proj-stat-val">${p.periodo}</span></div>
+      <div class="proj-stat" style="border-bottom:none;flex-direction:column;gap:6px;">
+        <div style="display:flex;justify-content:space-between;">
+          <span class="proj-stat-label">Execução</span>
+          <span class="proj-stat-label font-mono">${pct(p)}%</span>
+        </div>
+        <div class="prog-bar" style="height:6px;"><div class="prog-fill" style="width:${pct(p)}%;background:${pct(p)>80?'var(--gold)':'var(--blue)'};height:100%;border-radius:3px;"></div></div>
+      </div>
+      <div class="proj-actions">
+        <button class="btn-outline" onclick="openModal(${p.id})">📊 Ver detalhes</button>
+        <button class="btn-primary" onclick="lancState.filtEdital='${p.nome}';lancState.filtCat='';lancState.filtStatus='';lancState.page=1;goTo('lancamentos')">↗ Lançamentos</button>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function openModal(projId) {
+  const p = PROJETOS.find(x=>x.id===projId);
+  document.getElementById('modal-proj-title').textContent = p.nome;
+  document.getElementById('modal-proj-org').textContent = `${p.org} · Edital ${p.edital} · ${p.ano} · Coordenador: ${p.coord}`;
+  const total_orc = CATEG_DETAIL.reduce((s,d)=>s+d.orcado,0);
+  const total_real = CATEG_DETAIL.reduce((s,d)=>s+d.realizado,0);
+  document.getElementById('modal-proj-body').innerHTML = `
+    <p class="text-sm text-muted mb-3">Comparativo orçado × realizado por categoria</p>
+    <table class="detail-table">
+      <thead><tr><th>Categoria</th><th>Orçado</th><th>Realizado</th><th>Saldo</th><th>Execução</th></tr></thead>
+      <tbody>
+        ${CATEG_DETAIL.map(d=>{
+          const pct = Math.round(d.realizado/d.orcado*100);
+          const saldo = d.orcado-d.realizado;
+          return `<tr>
+            <td class="font-500">${d.cat}</td>
+            <td class="font-mono">R$ ${d.orcado.toLocaleString('pt-BR')},00</td>
+            <td class="font-mono">R$ ${d.realizado.toLocaleString('pt-BR')},00</td>
+            <td class="font-mono" style="color:var(--teal);">R$ ${saldo.toLocaleString('pt-BR')},00</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div class="prog-bar" style="width:80px;height:6px;"><div class="prog-fill" style="width:${pct}%;height:100%;background:${pct>80?'var(--gold)':'var(--blue)'};border-radius:3px;"></div></div>
+                <span class="font-mono text-xs">${pct}%</span>
+              </div>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+      <tfoot>
+        <tr style="background:var(--bg);font-weight:600;">
+          <td>Total</td>
+          <td class="font-mono">R$ ${total_orc.toLocaleString('pt-BR')},00</td>
+          <td class="font-mono">R$ ${total_real.toLocaleString('pt-BR')},00</td>
+          <td class="font-mono" style="color:var(--teal);">R$ ${(total_orc-total_real).toLocaleString('pt-BR')},00</td>
+          <td class="font-mono text-xs">${Math.round(total_real/total_orc*100)}%</td>
+        </tr>
+      </tfoot>
+    </table>`;
+  document.getElementById('modal-project').classList.add('show');
+}
+function closeModal() { document.getElementById('modal-project').classList.remove('show'); }
+
+// ══ NOVO LANÇAMENTO ═══════════════════════════════════════════
+function renderNovoLancamento(c) {
+  c.innerHTML = `
+  <div style="max-width:760px;margin:0 auto;">
+    <button class="back-btn" onclick="goTo('lancamentos')">← Voltar para lançamentos</button>
+    <div class="form-box">
+      <div class="form-section">
+        <label>Projeto / Edital</label>
+        <select class="form-input">
+          <option value="">Selecione o edital...</option>
+          ${PROJETOS.map(p=>`<option>${p.nome}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-section">
+        <label>Tipo de despesa</label>
+        <div class="type-grid">
+          <button type="button" class="type-btn active" onclick="this.parentElement.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">
+            <div class="type-btn-title">Custeio</div>
+            <div class="type-btn-sub">Despesas operacionais e materiais de consumo</div>
+          </button>
+          <button type="button" class="type-btn" onclick="this.parentElement.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">
+            <div class="type-btn-title">Capital</div>
+            <div class="type-btn-sub">Equipamentos e bens permanentes</div>
+          </button>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-section">
+          <label>Categoria</label>
+          <select class="form-input">
+            <option value="">Selecione...</option>
+            ${['Transporte','Diárias','Consumo','Patrimônio','Serviços'].map(c=>`<option>${c}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-section">
+          <label>Status</label>
+          <select class="form-input">
+            <option>Em Análise</option><option>Aprovado</option><option>Rejeitado</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-section">
+          <label>Valor (R$)</label>
+          <div style="position:relative;">
+            <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;">R$</span>
+            <input class="form-input" type="text" placeholder="0,00" style="padding-left:38px;">
+          </div>
+        </div>
+        <div class="form-section">
+          <label>Data do lançamento</label>
+          <input class="form-input" type="date">
+        </div>
+      </div>
+      <div class="form-section">
+        <label>Descrição do item</label>
+        <input class="form-input" type="text" placeholder="Descreva a despesa...">
+      </div>
+      <div class="form-section">
+        <label>Observações</label>
+        <textarea class="form-textarea" rows="3" placeholder="Informações adicionais..."></textarea>
+      </div>
+      <div class="form-section">
+        <label>Anexos</label>
+        <div class="upload-zone" onclick="alert('Upload de arquivo...')">
+          <div style="font-size:28px;margin-bottom:8px;">📎</div>
+          <p class="text-sm text-muted">Arraste arquivos ou clique para fazer upload</p>
+          <p class="text-xs text-muted mt-3">PDF, DOC, XLSX até 10MB</p>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" style="height:42px;flex:1;font-size:14px;" onclick="alert('Salvo!');goTo('lancamentos')">Salvar Lançamento</button>
+        <button class="btn-outline" style="height:42px;padding:0 20px;" onclick="goTo('lancamentos')">Cancelar</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ══ HISTÓRICO ═════════════════════════════════════════════════
+function renderHistorico(c) {
+  const hist = [
+    {id:1,tabela:'lancamentos',op:'INSERT',usuario:'jeferson',data:'17/03/2026 18:44'},
+    {id:2,tabela:'usuarios',op:'UPDATE',usuario:'jeferson',data:'17/03/2026 18:30'},
+    {id:3,tabela:'lancamentos',op:'UPDATE',usuario:'jeferson',data:'16/03/2026 19:15'},
+    {id:4,tabela:'projetos',op:'INSERT',usuario:'jeferson',data:'16/03/2026 14:00'},
+    {id:5,tabela:'lancamentos',op:'DELETE',usuario:'jeferson',data:'15/03/2026 10:30'},
+  ];
+  const opColor = {INSERT:'badge-green',UPDATE:'badge-gold',DELETE:'badge-red'};
+  c.innerHTML = `
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Tabela</th><th>Operação</th><th>Usuário</th><th>Data/Hora</th></tr></thead>
+      <tbody>
+        ${hist.map(h=>`<tr>
+          <td class="td-mono text-muted">${h.id}</td>
+          <td><span class="badge badge-blue">${h.tabela}</span></td>
+          <td><span class="badge ${opColor[h.op]}">${h.op}</span></td>
+          <td class="td-mono">${h.usuario}</td>
+          <td class="td-mono">${h.data}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+// ══ CONFIGURAÇÕES ═════════════════════════════════════════════
+let activeTab = 'users';
+function renderConfiguracoes(c) {
+  c.innerHTML = `
+  <div class="tabs">
+    <button class="tab-btn ${activeTab==='users'?'active':''}" onclick="setTab('users')">👥 Usuários</button>
+    <button class="tab-btn ${activeTab==='categories'?'active':''}" onclick="setTab('categories')">📁 Categorias</button>
+  </div>
+
+  <div class="tab-panel ${activeTab==='users'?'active':''}" id="tab-users">
+    <div class="flex justify-end mb-4">
+      <button class="btn-primary" onclick="alert('Novo usuário...')">+ Novo Usuário</button>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Nome</th><th>Email</th><th>Papel</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody>
+          ${USERS.map(u=>`<tr>
+            <td class="td-main">${u.nome}</td>
+            <td class="td-mono">${u.email}</td>
+            <td><span class="badge badge-blue">${u.papel}</span></td>
+            <td><span class="badge ${u.status==='Ativo'?'badge-green':'badge-gray'}">${u.status}</span></td>
+            <td><div class="flex gap-2">
+              <button class="btn-sm btn-outline" onclick="alert('Editar ${u.nome}')">✎ Editar</button>
+              <button class="btn-sm" style="background:var(--red-lt);color:var(--red);border:none;" onclick="alert('Remover?')">🗑</button>
+            </div></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tab-panel ${activeTab==='categories'?'active':''}" id="tab-cat">
+    <div class="flex justify-end mb-4">
+      <button class="btn-primary" onclick="alert('Nova categoria...')">+ Nova Categoria</button>
+    </div>
+    <div class="cat-grid">
+      ${CATEGORIAS_BD.map(cat=>`
+      <div class="cat-card">
+        <div class="cat-card-hdr">
+          <div>
+            <div class="cat-name">${cat.icon} ${cat.nome}</div>
+            <div class="cat-type">${cat.tipo} · ${cat.lanc} lançamentos</div>
+          </div>
+          <span class="badge ${cat.tipo==='CAPITAL'?'badge-gold':'badge-blue'}">${cat.tipo}</span>
+        </div>
+        <div class="cat-actions">
+          <button class="btn-sm btn-outline flex-1" onclick="alert('Editar ${cat.nome}')">✎ Editar</button>
+          <button class="btn-sm flex-1" style="background:var(--red-lt);color:var(--red);border:none;" onclick="alert('Excluir?')">🗑 Excluir</button>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+function setTab(tab) { activeTab=tab; renderPage(); }
+
+// ══ LOGIN LOGIC ═══════════════════════════════════════════════
+function toggleEye() {
+  const inp = document.getElementById('inp-senha');
+  inp.type = inp.type==='password'?'text':'password';
+}
+function doLogin() {
+  const login = document.getElementById('inp-login').value.trim();
+  const senha = document.getElementById('inp-senha').value.trim();
+  const fl = document.getElementById('fl-login');
+  const fs = document.getElementById('fl-senha');
+  const btn = document.getElementById('btnLogin');
+  fl.classList.remove('has-error'); fs.classList.remove('has-error');
+  document.getElementById('alertErr').classList.remove('show');
+  document.getElementById('alertOk').classList.remove('show');
+  let ok = true;
+  if(!login){fl.classList.add('has-error');ok=false;}
+  if(!senha){fs.classList.add('has-error');ok=false;}
+  if(!ok) return;
+  btn.classList.add('loading');
+  setTimeout(()=>{
+    btn.classList.remove('loading');
+    if(login==='jeferson'&&senha==='spectre@2026'){
+      document.getElementById('alertOk').classList.add('show');
+      setTimeout(()=>{
+        document.getElementById('s-login').style.display='none';
+        document.getElementById('s-app').classList.add('active');
+        renderPage();
+      },1400);
+    } else {
+      document.getElementById('alertErr').classList.add('show');
+    }
+  },1100);
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.getElementById('s-login').style.display!=='none') doLogin();
+});
+document.getElementById('s-login').style.display='grid';
+</script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPECTRE — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink:#0E1117; --ink2:#1C2333; --slate:#4A5568; --muted:#8896A7;
+  --line:#DDE3EC; --bg:#F7F9FC; --white:#FFFFFF;
+  --blue:#1A4DC2; --teal:#097D78; --red:#C0392B; --gold:#B7891A;
+}
+body {
+  font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
+  min-height:100vh; display:grid; grid-template-columns:1fr 1fr;
+}
+.panel-left {
+  background:var(--ink); padding:56px 64px;
+  display:flex; flex-direction:column; justify-content:space-between;
+  position:relative; overflow:hidden;
+}
+.panel-left::before {
+  content:''; position:absolute; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg width='30' height='30' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='%23ffffff' opacity='0.04'/%3E%3C/svg%3E");
+  background-size:30px 30px;
+}
+.pl-top { position:relative; }
+.brand { display:flex; align-items:center; gap:14px; margin-bottom:64px; }
+.brand-mark {
+  width:38px; height:38px; border:2px solid rgba(255,255,255,0.15);
+  border-radius:8px; display:flex; align-items:center; justify-content:center;
+  font-family:'DM Mono',monospace; font-size:15px; font-weight:500;
+  color:rgba(255,255,255,0.9);
+}
+.brand-name {
+  font-family:'DM Mono',monospace; font-size:13px; font-weight:500;
+  letter-spacing:4px; color:rgba(255,255,255,0.5); text-transform:uppercase;
+}
+.tagline {
+  font-family:'Playfair Display',serif; font-size:38px; font-weight:700;
+  line-height:1.2; color:var(--white); margin-bottom:24px; letter-spacing:-0.5px;
+}
+.tagline em { font-style:italic; color:rgba(255,255,255,0.4); }
+.tagline-sub {
+  font-size:14px; line-height:1.7; color:rgba(255,255,255,0.38);
+  max-width:360px; font-weight:300;
+}
+.metrics {
+  display:grid; grid-template-columns:1fr 1fr; gap:1px;
+  background:rgba(255,255,255,0.06); border-radius:12px; overflow:hidden;
+}
+.metric { background:rgba(255,255,255,0.02); padding:20px 24px; }
+.metric-val {
+  font-family:'DM Mono',monospace; font-size:22px;
+  color:rgba(255,255,255,0.75); margin-bottom:4px; letter-spacing:-0.5px;
+}
+.metric-label { font-size:10px; color:rgba(255,255,255,0.25); letter-spacing:0.5px; text-transform:uppercase; }
+.pl-bottom {
+  position:relative; font-family:'DM Mono',monospace;
+  font-size:11px; color:rgba(255,255,255,0.18); letter-spacing:1px;
+}
+.panel-right {
+  background:var(--white); padding:56px 64px;
+  display:flex; flex-direction:column; justify-content:center; position:relative;
+}
+.form-header { margin-bottom:40px; }
+.form-eyebrow {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px;
+  text-transform:uppercase; color:var(--blue); margin-bottom:10px;
+}
+.form-title { font-size:26px; font-weight:500; color:var(--ink); letter-spacing:-0.5px; line-height:1.2; }
+.form-title span { color:var(--muted); font-weight:300; }
+.sep { display:flex; align-items:center; gap:12px; margin:32px 0; }
+.sep-line { flex:1; height:1px; background:var(--line); }
+.sep-text { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; }
+.field { margin-bottom:20px; }
+.field-label { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:7px; }
+.field-label span { font-size:12px; font-weight:500; letter-spacing:0.3px; color:var(--slate); }
+.field-label a { font-size:11px; color:var(--blue); text-decoration:none; opacity:0.7; transition:opacity 0.2s; }
+.field-label a:hover { opacity:1; }
+.input-wrap { position:relative; }
+.input-wrap input {
+  width:100%; height:46px; border:1.5px solid var(--line); border-radius:8px;
+  padding:0 44px 0 14px; font-family:'DM Sans',sans-serif; font-size:14px;
+  color:var(--ink); background:var(--white); outline:none;
+  transition:border-color 0.15s, box-shadow 0.15s;
+}
+.input-wrap input::placeholder { color:#BCC5D0; }
+.input-wrap input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(26,77,194,0.08); }
+.input-icon {
+  position:absolute; right:14px; top:50%; transform:translateY(-50%);
+  color:#BCC5D0; cursor:pointer; background:none; border:none; padding:0;
+  display:flex; align-items:center; transition:color 0.2s;
+}
+.input-icon:hover { color:var(--slate); }
+.field-error { display:none; font-size:11.5px; color:var(--red); margin-top:5px; padding-left:2px; }
+.field.has-error input { border-color:var(--red); }
+.field.has-error .field-error { display:block; }
+.remember { display:flex; align-items:center; gap:8px; margin-bottom:28px; cursor:pointer; }
+.remember input[type="checkbox"] { width:15px; height:15px; accent-color:var(--blue); cursor:pointer; }
+.remember span { font-size:12.5px; color:var(--slate); }
+.btn {
+  width:100%; height:46px; background:var(--ink); color:var(--white);
+  border:none; border-radius:8px; font-family:'DM Sans',sans-serif;
+  font-size:14px; font-weight:500; letter-spacing:0.3px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:background 0.15s, transform 0.1s; position:relative; overflow:hidden;
+}
+.btn:hover { background:var(--ink2); }
+.btn:active { transform:scale(0.99); }
+.btn-arrow { font-size:16px; transition:transform 0.2s; }
+.btn:hover .btn-arrow { transform:translateX(3px); }
+.btn.loading { pointer-events:none; }
+.btn.loading .btn-text, .btn.loading .btn-arrow { opacity:0; }
+.btn-spinner {
+  position:absolute; width:18px; height:18px;
+  border:2px solid rgba(255,255,255,0.2); border-top-color:white;
+  border-radius:50%; animation:spin 0.6s linear infinite; display:none;
+}
+.btn.loading .btn-spinner { display:block; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.alert { display:none; margin-top:16px; padding:11px 14px; border-radius:7px; font-size:12.5px; line-height:1.5; }
+.alert.error { background:#FDF0EF; border:1px solid #F5C6C0; color:var(--red); }
+.alert.success { background:#EEF7F6; border:1px solid #B0D9D6; color:var(--teal); }
+.alert.show { display:block; }
+.form-footer {
+  margin-top:40px; padding-top:24px; border-top:1px solid var(--line);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.form-footer-left { font-size:11.5px; color:var(--muted); }
+.version-tag {
+  font-family:'DM Mono',monospace; font-size:10px;
+  background:var(--bg); border:1px solid var(--line);
+  border-radius:4px; padding:3px 8px; color:var(--muted);
+}
+.wf-nav {
+  position:fixed; bottom:20px; right:20px;
+  display:flex; align-items:center; gap:8px;
+  background:var(--ink); border-radius:8px; padding:10px 14px;
+  font-size:11px; color:rgba(255,255,255,0.4); font-family:'DM Mono',monospace;
+}
+.wf-nav strong { color:rgba(255,255,255,0.8); }
+.wf-nav a {
+  color:rgba(255,255,255,0.6); text-decoration:none;
+  margin-left:10px; padding-left:10px; border-left:1px solid rgba(255,255,255,0.1);
+}
+.wf-nav a:hover { color:white; }
+.ann {
+  position:absolute; background:#FFFBEB; border:1px solid #F6D860;
+  border-radius:6px; padding:7px 10px; font-size:10.5px;
+  color:#7A5C00; width:170px; line-height:1.5; pointer-events:none; z-index:10;
+}
+.ann b { display:block; font-size:9px; letter-spacing:1px; text-transform:uppercase; margin-bottom:2px; color:#B8860B; }
+.ann::after {
+  content:''; position:absolute; top:12px; left:-7px;
+  border:4px solid transparent; border-right-color:#F6D860;
+}
+@media (max-width:900px) {
+  body { grid-template-columns:1fr; }
+  .panel-left { display:none; }
+  .panel-right { padding:40px 32px; }
+}
+</style>
+</head>
+<body>
+
+<div class="panel-left">
+  <div class="pl-top">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div class="brand-name">Spectre</div>
+    </div>
+    <div class="tagline">Controle<br>financeiro<br><em>sem atrito.</em></div>
+    <div class="tagline-sub">Gerencie custeio e capital de projetos de pesquisa com rastreabilidade completa e auditoria automática.</div>
+  </div>
+  <div>
+    <div class="metrics">
+      <div class="metric"><div class="metric-val">9</div><div class="metric-label">Tabelas</div></div>
+      <div class="metric"><div class="metric-val">15</div><div class="metric-label">Triggers</div></div>
+      <div class="metric"><div class="metric-val">JWT</div><div class="metric-label">Autenticação</div></div>
+      <div class="metric"><div class="metric-val">REST</div><div class="metric-label">API</div></div>
+    </div>
+  </div>
+  <div class="pl-bottom">UNISC · PI MÓDULO III A · 2026</div>
+</div>
+
+<div class="panel-right">
+  <div class="ann" style="right:-185px; top:60px;"><b>Painel info</b>Identidade + métricas do sistema. Oculto em mobile.</div>
+  <div class="ann" style="right:-185px; top:230px;"><b>Campo login</b>Obrigatório. Foco automático ao carregar a página.</div>
+  <div class="ann" style="right:-185px; top:315px;"><b>Campo senha</b>Botão olho para mostrar/ocultar. Enter submete o form.</div>
+  <div class="ann" style="right:-185px; top:430px;"><b>Botão entrar</b>POST /api/auth/login/ — loading state com spinner. Salva token JWT no localStorage.</div>
+
+  <div class="form-header">
+    <div style="font-family:'DM Mono',monospace;font-size:22px;font-weight:500;letter-spacing:6px;color:var(--ink);margin-bottom:20px;">SPECTRE</div>
+    <div class="form-eyebrow">Acesso ao sistema</div>
+    <div class="form-title">Bem-vindo de volta<br><span>informe suas credenciais</span></div>
+  </div>
+
+  <div class="sep">
+    <div class="sep-line"></div>
+    <div class="sep-text">identificação</div>
+    <div class="sep-line"></div>
+  </div>
+
+  <div class="field" id="field-login">
+    <div class="field-label"><span>Login</span></div>
+    <div class="input-wrap">
+      <input type="text" id="inp-login" placeholder="Seu nome de login" autocomplete="username" autofocus>
+    </div>
+    <div class="field-error">Campo obrigatório.</div>
+  </div>
+
+  <div class="field" id="field-senha">
+    <div class="field-label">
+      <span>Senha</span>
+      <a href="#">Esqueceu?</a>
+    </div>
+    <div class="input-wrap">
+      <input type="password" id="inp-senha" placeholder="••••••••" autocomplete="current-password">
+      <button class="input-icon" onclick="toggleSenha()" title="Mostrar/ocultar senha">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+    <div class="field-error">Campo obrigatório.</div>
+  </div>
+
+  <label class="remember">
+    <input type="checkbox" id="chk-remember">
+    <span>Manter conectado</span>
+  </label>
+
+  <button class="btn" id="btnLogin" onclick="doLogin()">
+    <span class="btn-text">Entrar no sistema</span>
+    <span class="btn-arrow">→</span>
+    <div class="btn-spinner"></div>
+  </button>
+
+  <div class="alert error" id="alertError">Credenciais inválidas. Verifique seu login e senha.</div>
+  <div class="alert success" id="alertOk">✓ Autenticado — redirecionando para o dashboard…</div>
+
+  <div class="form-footer">
+    <div class="form-footer-left">Projeto Integrador · UNISC 2026</div>
+    <div class="version-tag">v1.0-dev</div>
+  </div>
+</div>
+
+<div class="wf-nav">
+  <strong>01</strong>&nbsp;/ 06 — Login
+  <a href="wireframe_02_dashboard.html">Dashboard →</a>
+</div>
+
+<script>
+function toggleSenha() {
+  const inp = document.getElementById('inp-senha');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+function validar() {
+  let ok = true;
+  const fl = document.getElementById('field-login');
+  const fs = document.getElementById('field-senha');
+  fl.classList.remove('has-error'); fs.classList.remove('has-error');
+  if (!document.getElementById('inp-login').value.trim()) { fl.classList.add('has-error'); ok = false; }
+  if (!document.getElementById('inp-senha').value.trim()) { fs.classList.add('has-error'); ok = false; }
+  return ok;
+}
+function doLogin() {
+  document.getElementById('alertError').classList.remove('show');
+  document.getElementById('alertOk').classList.remove('show');
+  if (!validar()) return;
+  const btn = document.getElementById('btnLogin');
+  btn.classList.add('loading');
+  const login = document.getElementById('inp-login').value.trim();
+  const senha = document.getElementById('inp-senha').value.trim();
+  setTimeout(() => {
+    btn.classList.remove('loading');
+    if (login === 'jeferson' && senha === 'spectre@2026') {
+      document.getElementById('alertOk').classList.add('show');
+      setTimeout(() => { window.location.href = 'wireframe_02_dashboard.html'; }, 1400);
+    } else {
+      document.getElementById('alertError').classList.add('show');
+    }
+  }, 1100);
+}
+document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+</script>
+</body>
+</html>

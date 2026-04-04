@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2100" height="1828" viewBox="0 0 2100 1828">
+<rect x="0" y="0" width="2100" height="1828" fill="#F4F7FB"/>
+<rect x="15" y="10" width="2070" height="34" rx="6" fill="#1F3864"/>
+<text x="1050" y="33" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">SPECTRE — Diagrama de Classes</text>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 2L9 5L1 8" fill="none" stroke="#555555" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="828" y="78" width="450" height="255" rx="6" fill="#BBBBBB" opacity="0.22"/>
+<rect x="825" y="75" width="450" height="255" rx="6" fill="#E2EFDA" stroke="#2E75B6" stroke-width="1.5"/>
+<rect x="825" y="75" width="450" height="27" rx="6" fill="#375623"/>
+<rect x="825" y="81" width="450" height="21" fill="#375623"/>
+<text x="1050" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">HistoricoAlteracoes</text>
+<circle cx="835" cy="114" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="847" y="118" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">id: BigInt</text>
+<circle cx="835" cy="132" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="847" y="136" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">tabela: String</text>
+<circle cx="835" cy="150" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="847" y="154" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">registro_id: Int</text>
+<circle cx="835" cy="168" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="847" y="172" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">operacao: Enum</text>
+<circle cx="835" cy="186" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="847" y="190" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">usuario_id: Int</text>
+<circle cx="835" cy="204" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="847" y="208" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">dados_antes: JSON</text>
+<circle cx="835" cy="222" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="847" y="226" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">dados_depois: JSON</text>
+<circle cx="835" cy="240" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="847" y="244" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">alterado_em: DateTime</text>
+<line x1="825" y1="261" x2="1275" y2="261" stroke="#2E75B6" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="826" y="261" width="448" height="69" fill="#C8E6C0"/>
+<circle cx="835" cy="273" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="847" y="277" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_tabela(tabela,id): List~HistoricoAlteracoes~</text>
+<circle cx="835" cy="291" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="847" y="295" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_usuario(id): List~HistoricoAlteracoes~</text>
+<circle cx="835" cy="309" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="847" y="313" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_periodo(ini,fim): List~HistoricoAlteracoes~</text>
+<rect x="1338" y="78" width="420" height="435" rx="6" fill="#BBBBBB" opacity="0.22"/>
+<rect x="1335" y="75" width="420" height="435" rx="6" fill="#EBF2FA" stroke="#2E75B6" stroke-width="1.5"/>
+<rect x="1335" y="75" width="420" height="27" rx="6" fill="#1F3864"/>
+<rect x="1335" y="81" width="420" height="21" fill="#1F3864"/>
+<text x="1545" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">Projeto</text>
+<circle cx="1345" cy="114" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="118" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">id: Int</text>
+<circle cx="1345" cy="132" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="136" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">nome: String</text>
+<circle cx="1345" cy="150" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="154" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">orgao_financiador: String</text>
+<circle cx="1345" cy="168" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="172" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">numero_edital: String</text>
+<circle cx="1345" cy="186" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="190" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">ano: Year</text>
+<circle cx="1345" cy="204" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="208" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">valor_total_aprovado: Decimal</text>
+<circle cx="1345" cy="222" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="226" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_inicio: Date</text>
+<circle cx="1345" cy="240" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="244" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_fim: Date</text>
+<circle cx="1345" cy="258" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="262" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">status: Enum</text>
+<circle cx="1345" cy="276" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="280" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">descricao: Text</text>
+<circle cx="1345" cy="294" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="298" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">ativo: Boolean</text>
+<circle cx="1345" cy="312" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="316" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_at: DateTime</text>
+<circle cx="1345" cy="330" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="334" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_by: Int</text>
+<circle cx="1345" cy="348" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="352" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_at: DateTime</text>
+<circle cx="1345" cy="366" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1357" y="370" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_by: Int</text>
+<line x1="1335" y1="387" x2="1755" y2="387" stroke="#2E75B6" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="1336" y="387" width="418" height="123" fill="#D6E4F7"/>
+<circle cx="1345" cy="399" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1357" y="403" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">save(): void</text>
+<circle cx="1345" cy="417" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1357" y="421" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">delete(): void</text>
+<circle cx="1345" cy="435" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1357" y="439" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_id(id): Projeto</text>
+<circle cx="1345" cy="453" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1357" y="457" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_all_ativos(): List~Projeto~</text>
+<circle cx="1345" cy="471" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1357" y="475" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_ano(ano): List~Projeto~</text>
+<circle cx="1345" cy="489" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1357" y="493" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_status(status): List~Projeto~</text>
+<rect x="328" y="583" width="430" height="399" rx="6" fill="#BBBBBB" opacity="0.22"/>
+<rect x="325" y="580" width="430" height="399" rx="6" fill="#EBF2FA" stroke="#2E75B6" stroke-width="1.5"/>
+<rect x="325" y="580" width="430" height="27" rx="6" fill="#1F3864"/>
+<rect x="325" y="586" width="430" height="21" fill="#1F3864"/>
+<text x="540" y="599" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">Usuario</text>
+<circle cx="335" cy="619" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="347" y="623" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">id: Int</text>
+<circle cx="335" cy="637" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="347" y="641" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">nome: String</text>
+<circle cx="335" cy="655" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="347" y="659" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">email: String</text>
+<circle cx="335" cy="673" r="4" fill="#C00000" opacity="0.8"/>
+<text x="347" y="677" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">senha_hash: String</text>
+<circle cx="335" cy="691" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="347" y="695" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">cpf: String</text>
+<circle cx="335" cy="709" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="347" y="713" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_nascimento: Date</text>
+<circle cx="335" cy="727" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="347" y="731" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">papel_atividade: String</text>
+<circle cx="335" cy="745" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="347" y="749" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">login: String</text>
+<circle cx="335" cy="763" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="347" y="767" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">ativo: Boolean</text>
+<circle cx="335" cy="781" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="347" y="785" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_at: DateTime</text>
+<circle cx="335" cy="799" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="347" y="803" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_by: Int</text>
+<circle cx="335" cy="817" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="347" y="821" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_at: DateTime</text>
+<circle cx="335" cy="835" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="347" y="839" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_by: Int</text>
+<line x1="325" y1="856" x2="755" y2="856" stroke="#2E75B6" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="326" y="856" width="428" height="123" fill="#D6E4F7"/>
+<circle cx="335" cy="868" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="347" y="872" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">save(): void</text>
+<circle cx="335" cy="886" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="347" y="890" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">delete(): void</text>
+<circle cx="335" cy="904" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="347" y="908" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_id(id): Usuario</text>
+<circle cx="335" cy="922" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="347" y="926" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_all(): List~Usuario~</text>
+<circle cx="335" cy="940" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="347" y="944" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">autenticar(login,senha): Bool</text>
+<circle cx="335" cy="958" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="347" y="962" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">desativar(): void</text>
+<rect x="838" y="583" width="430" height="453" rx="6" fill="#BBBBBB" opacity="0.22"/>
+<rect x="835" y="580" width="430" height="453" rx="6" fill="#EBF2FA" stroke="#2E75B6" stroke-width="1.5"/>
+<rect x="835" y="580" width="430" height="27" rx="6" fill="#1F3864"/>
+<rect x="835" y="586" width="430" height="21" fill="#1F3864"/>
+<text x="1050" y="599" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">Lancamento</text>
+<circle cx="845" cy="619" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="623" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">id: Int</text>
+<circle cx="845" cy="637" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="641" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">projeto_id: Int</text>
+<circle cx="845" cy="655" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="659" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">usuario_id: Int</text>
+<circle cx="845" cy="673" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="677" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">categoria_id: Int</text>
+<circle cx="845" cy="691" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="695" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">status: Enum</text>
+<circle cx="845" cy="709" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="713" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">descricao_item: String</text>
+<circle cx="845" cy="727" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="731" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">valor_total: Decimal</text>
+<circle cx="845" cy="745" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="749" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_lancamento: Date</text>
+<circle cx="845" cy="763" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="767" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">observacoes: String</text>
+<circle cx="845" cy="781" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="785" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_at: DateTime</text>
+<circle cx="845" cy="799" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="803" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_by: Int</text>
+<circle cx="845" cy="817" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="821" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_at: DateTime</text>
+<circle cx="845" cy="835" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="857" y="839" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_by: Int</text>
+<line x1="835" y1="856" x2="1265" y2="856" stroke="#2E75B6" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="836" y="856" width="428" height="177" fill="#D6E4F7"/>
+<circle cx="845" cy="868" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="857" y="872" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">save(): void</text>
+<circle cx="845" cy="886" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="857" y="890" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">delete(): void</text>
+<circle cx="845" cy="904" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="857" y="908" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_id(id): Lancamento</text>
+<circle cx="845" cy="922" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="857" y="926" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_projeto(projeto_id): List~Lancamento~</text>
+<circle cx="845" cy="940" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="857" y="944" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_usuario(id): List~Lancamento~</text>
+<circle cx="845" cy="958" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="857" y="962" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_status(status): List~Lancamento~</text>
+<circle cx="845" cy="976" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="857" y="980" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_periodo(ini,fim): List~Lancamento~</text>
+<circle cx="845" cy="994" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="857" y="998" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_total_orcado(): Decimal</text>
+<circle cx="845" cy="1012" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="857" y="1016" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_total_realizado(): Decimal</text>
+<rect x="1348" y="583" width="430" height="309" rx="6" fill="#BBBBBB" opacity="0.22"/>
+<rect x="1345" y="580" width="430" height="309" rx="6" fill="#EBF2FA" stroke="#2E75B6" stroke-width="1.5"/>
+<rect x="1345" y="580" width="430" height="27" rx="6" fill="#1F3864"/>
+<rect x="1345" y="586" width="430" height="21" fill="#1F3864"/>
+<text x="1560" y="599" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">Categoria</text>
+<circle cx="1355" cy="619" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1367" y="623" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">id: Int</text>
+<circle cx="1355" cy="637" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1367" y="641" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">tipo_categoria: Enum</text>
+<circle cx="1355" cy="655" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1367" y="659" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">nome_subcategoria: String</text>
+<circle cx="1355" cy="673" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1367" y="677" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">descricao: String</text>
+<circle cx="1355" cy="691" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1367" y="695" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">ativo: Boolean</text>
+<circle cx="1355" cy="709" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1367" y="713" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_at: DateTime</text>
+<circle cx="1355" cy="727" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1367" y="731" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_by: Int</text>
+<circle cx="1355" cy="745" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1367" y="749" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_at: DateTime</text>
+<circle cx="1355" cy="763" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1367" y="767" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_by: Int</text>
+<line x1="1345" y1="784" x2="1775" y2="784" stroke="#2E75B6" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="1346" y="784" width="428" height="105" fill="#D6E4F7"/>
+<circle cx="1355" cy="796" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1367" y="800" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">save(): void</text>
+<circle cx="1355" cy="814" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1367" y="818" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">delete(): void</text>
+<circle cx="1355" cy="832" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1367" y="836" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_id(id): Categoria</text>
+<circle cx="1355" cy="850" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1367" y="854" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_all_ativas(): List~Categoria~</text>
+<circle cx="1355" cy="868" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1367" y="872" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_tipo(tipo): List~Categoria~</text>
+<rect x="327" y="1156" width="262" height="453" rx="6" fill="#BBBBBB" opacity="0.22"/>
+<rect x="324" y="1153" width="262" height="453" rx="6" fill="#EBF2FA" stroke="#2E75B6" stroke-width="1.5"/>
+<rect x="324" y="1153" width="262" height="27" rx="6" fill="#1F3864"/>
+<rect x="324" y="1159" width="262" height="21" fill="#1F3864"/>
+<text x="455" y="1172" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">DetalhesTransporte</text>
+<circle cx="334" cy="1192" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1196" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">id: Int</text>
+<circle cx="334" cy="1210" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1214" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">lancamento_id: Int</text>
+<circle cx="334" cy="1228" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1232" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">meio_transporte: Enum</text>
+<circle cx="334" cy="1246" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1250" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">local_origem: String</text>
+<circle cx="334" cy="1264" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1268" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">local_destino: String</text>
+<circle cx="334" cy="1282" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1286" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_saida: Date</text>
+<circle cx="334" cy="1300" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1304" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_chegada: Date</text>
+<circle cx="334" cy="1318" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1322" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">horario_saida: Time</text>
+<circle cx="334" cy="1336" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1340" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">horario_chegada: Time</text>
+<circle cx="334" cy="1354" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1358" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">distancia_km: Decimal</text>
+<circle cx="334" cy="1372" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1376" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">custo_passagem: Decimal</text>
+<circle cx="334" cy="1390" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1394" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">custo_abastecimento: Decimal</text>
+<circle cx="334" cy="1408" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1412" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">custo_aplicativo_taxi: Decimal</text>
+<circle cx="334" cy="1426" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1430" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">custo_alimentacao: Decimal</text>
+<circle cx="334" cy="1444" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1448" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_at: DateTime</text>
+<circle cx="334" cy="1462" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1466" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_by: Int</text>
+<circle cx="334" cy="1480" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1484" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_at: DateTime</text>
+<circle cx="334" cy="1498" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="346" y="1502" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_by: Int</text>
+<line x1="324" y1="1519" x2="586" y2="1519" stroke="#2E75B6" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="325" y="1519" width="260" height="87" fill="#D6E4F7"/>
+<circle cx="334" cy="1531" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="346" y="1535" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">save(): void</text>
+<circle cx="334" cy="1549" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="346" y="1553" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">delete(): void</text>
+<circle cx="334" cy="1567" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="346" y="1571" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_lancamento(id): DetalhesTransporte</text>
+<circle cx="334" cy="1585" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="346" y="1589" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">calcular_custo_total(): Decimal</text>
+<rect x="611" y="1156" width="262" height="345" rx="6" fill="#BBBBBB" opacity="0.22"/>
+<rect x="608" y="1153" width="262" height="345" rx="6" fill="#EBF2FA" stroke="#2E75B6" stroke-width="1.5"/>
+<rect x="608" y="1153" width="262" height="27" rx="6" fill="#1F3864"/>
+<rect x="608" y="1159" width="262" height="21" fill="#1F3864"/>
+<text x="739" y="1172" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">DetalhesDiaria</text>
+<circle cx="618" cy="1192" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="630" y="1196" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">id: Int</text>
+<circle cx="618" cy="1210" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="630" y="1214" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">lancamento_id: Int</text>
+<circle cx="618" cy="1228" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="630" y="1232" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">num_diarias: Int</text>
+<circle cx="618" cy="1246" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="630" y="1250" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">valor_unitario: Decimal</text>
+<circle cx="618" cy="1264" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="630" y="1268" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">cidade_destino: String</text>
+<circle cx="618" cy="1282" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="630" y="1286" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">motivo: String</text>
+<circle cx="618" cy="1300" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="630" y="1304" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_inicio: Date</text>
+<circle cx="618" cy="1318" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="630" y="1322" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_fim: Date</text>
+<circle cx="618" cy="1336" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="630" y="1340" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_at: DateTime</text>
+<circle cx="618" cy="1354" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="630" y="1358" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_by: Int</text>
+<circle cx="618" cy="1372" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="630" y="1376" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_at: DateTime</text>
+<circle cx="618" cy="1390" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="630" y="1394" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_by: Int</text>
+<line x1="608" y1="1411" x2="870" y2="1411" stroke="#2E75B6" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="609" y="1411" width="260" height="87" fill="#D6E4F7"/>
+<circle cx="618" cy="1423" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="630" y="1427" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">save(): void</text>
+<circle cx="618" cy="1441" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="630" y="1445" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">delete(): void</text>
+<circle cx="618" cy="1459" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="630" y="1463" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_lancamento(id): DetalhesDiaria</text>
+<circle cx="618" cy="1477" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="630" y="1481" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">calcular_valor_total(): Decimal</text>
+<rect x="895" y="1156" width="262" height="399" rx="6" fill="#BBBBBB" opacity="0.22"/>
+<rect x="892" y="1153" width="262" height="399" rx="6" fill="#EBF2FA" stroke="#2E75B6" stroke-width="1.5"/>
+<rect x="892" y="1153" width="262" height="27" rx="6" fill="#1F3864"/>
+<rect x="892" y="1159" width="262" height="21" fill="#1F3864"/>
+<text x="1023" y="1172" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">DetalhesMatConsumo</text>
+<circle cx="902" cy="1192" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1196" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">id: Int</text>
+<circle cx="902" cy="1210" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1214" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">lancamento_id: Int</text>
+<circle cx="902" cy="1228" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1232" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">tipo_material: Enum</text>
+<circle cx="902" cy="1246" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1250" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">descricao_item: String</text>
+<circle cx="902" cy="1264" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1268" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">quantidade: Decimal</text>
+<circle cx="902" cy="1282" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1286" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">unidade_medida: String</text>
+<circle cx="902" cy="1300" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1304" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">valor_unitario: Decimal</text>
+<circle cx="902" cy="1318" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1322" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">fornecedor: String</text>
+<circle cx="902" cy="1336" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1340" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">cnpj_fornecedor: String</text>
+<circle cx="902" cy="1354" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1358" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">numero_nf: String</text>
+<circle cx="902" cy="1372" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1376" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_compra: Date</text>
+<circle cx="902" cy="1390" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1394" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_at: DateTime</text>
+<circle cx="902" cy="1408" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1412" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_by: Int</text>
+<circle cx="902" cy="1426" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1430" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_at: DateTime</text>
+<circle cx="902" cy="1444" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="914" y="1448" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_by: Int</text>
+<line x1="892" y1="1465" x2="1154" y2="1465" stroke="#2E75B6" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="893" y="1465" width="260" height="87" fill="#D6E4F7"/>
+<circle cx="902" cy="1477" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="914" y="1481" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">save(): void</text>
+<circle cx="902" cy="1495" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="914" y="1499" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">delete(): void</text>
+<circle cx="902" cy="1513" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="914" y="1517" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_lancamento(id): List~DetalhesMatConsumo~</text>
+<circle cx="902" cy="1531" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="914" y="1535" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">calcular_subtotal(): Decimal</text>
+<rect x="1179" y="1156" width="262" height="489" rx="6" fill="#BBBBBB" opacity="0.22"/>
+<rect x="1176" y="1153" width="262" height="489" rx="6" fill="#EBF2FA" stroke="#2E75B6" stroke-width="1.5"/>
+<rect x="1176" y="1153" width="262" height="27" rx="6" fill="#1F3864"/>
+<rect x="1176" y="1159" width="262" height="21" fill="#1F3864"/>
+<text x="1307" y="1172" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">DetalhesServTerceiros</text>
+<circle cx="1186" cy="1192" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1196" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">id: Int</text>
+<circle cx="1186" cy="1210" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1214" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">lancamento_id: Int</text>
+<circle cx="1186" cy="1228" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1232" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">tipo_servico: Enum</text>
+<circle cx="1186" cy="1246" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1250" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">tipo_pessoa: Enum</text>
+<circle cx="1186" cy="1264" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1268" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">nome_prestador: String</text>
+<circle cx="1186" cy="1282" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1286" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">cpf_cnpj: String</text>
+<circle cx="1186" cy="1300" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1304" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">descricao_servico: String</text>
+<circle cx="1186" cy="1318" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1322" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">numero_contrato: String</text>
+<circle cx="1186" cy="1336" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1340" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">numero_nf_rpa: String</text>
+<circle cx="1186" cy="1354" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1358" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_inicio: Date</text>
+<circle cx="1186" cy="1372" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1376" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_conclusao: Date</text>
+<circle cx="1186" cy="1390" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1394" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">valor_bruto: Decimal</text>
+<circle cx="1186" cy="1408" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1412" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">percentual_retencao: Decimal</text>
+<circle cx="1186" cy="1426" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1430" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">valor_retencao: Decimal [gerado]</text>
+<circle cx="1186" cy="1444" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1448" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">valor_liquido: Decimal [gerado]</text>
+<circle cx="1186" cy="1462" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1466" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_at: DateTime</text>
+<circle cx="1186" cy="1480" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1484" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_by: Int</text>
+<circle cx="1186" cy="1498" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1502" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_at: DateTime</text>
+<circle cx="1186" cy="1516" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1198" y="1520" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_by: Int</text>
+<line x1="1176" y1="1537" x2="1438" y2="1537" stroke="#2E75B6" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="1177" y="1537" width="260" height="105" fill="#D6E4F7"/>
+<circle cx="1186" cy="1549" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1198" y="1553" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">save(): void</text>
+<circle cx="1186" cy="1567" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1198" y="1571" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">delete(): void</text>
+<circle cx="1186" cy="1585" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1198" y="1589" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_lancamento(id): DetalhesServTerceiros</text>
+<circle cx="1186" cy="1603" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1198" y="1607" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">calcular_retencao(): Decimal</text>
+<circle cx="1186" cy="1621" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1198" y="1625" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">calcular_liquido(): Decimal</text>
+<rect x="1463" y="1156" width="315" height="525" rx="6" fill="#BBBBBB" opacity="0.22"/>
+<rect x="1460" y="1153" width="315" height="525" rx="6" fill="#EBF2FA" stroke="#2E75B6" stroke-width="1.5"/>
+<rect x="1460" y="1153" width="315" height="27" rx="6" fill="#1F3864"/>
+<rect x="1460" y="1159" width="315" height="21" fill="#1F3864"/>
+<text x="1617" y="1172" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">DetalhesMaterialPermanente</text>
+<circle cx="1470" cy="1192" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1196" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">id: Int</text>
+<circle cx="1470" cy="1210" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1214" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">lancamento_id: Int</text>
+<circle cx="1470" cy="1228" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1232" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">descricao_bem: String</text>
+<circle cx="1470" cy="1246" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1250" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">marca: String</text>
+<circle cx="1470" cy="1264" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1268" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">modelo: String</text>
+<circle cx="1470" cy="1282" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1286" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">numero_serie: String</text>
+<circle cx="1470" cy="1300" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1304" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">numero_patrimonio: String</text>
+<circle cx="1470" cy="1318" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1322" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">numero_nf: String</text>
+<circle cx="1470" cy="1336" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1340" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">fornecedor: String</text>
+<circle cx="1470" cy="1354" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1358" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">cnpj_fornecedor: String</text>
+<circle cx="1470" cy="1372" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1376" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_aquisicao: Date</text>
+<circle cx="1470" cy="1390" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1394" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">garantia_meses: Int</text>
+<circle cx="1470" cy="1408" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1412" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">data_fim_garantia: Date [gerado]</text>
+<circle cx="1470" cy="1426" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1430" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">estado_conservacao: Enum</text>
+<circle cx="1470" cy="1444" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1448" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">localizacao: String</text>
+<circle cx="1470" cy="1462" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1466" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">responsavel_bem: String</text>
+<circle cx="1470" cy="1480" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1484" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">observacoes: Text</text>
+<circle cx="1470" cy="1498" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1502" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_at: DateTime</text>
+<circle cx="1470" cy="1516" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1520" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">created_by: Int</text>
+<circle cx="1470" cy="1534" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1538" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_at: DateTime</text>
+<circle cx="1470" cy="1552" r="4" fill="#1a6fba" opacity="0.8"/>
+<text x="1482" y="1556" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">updated_by: Int</text>
+<line x1="1460" y1="1573" x2="1775" y2="1573" stroke="#2E75B6" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="1461" y="1573" width="313" height="105" fill="#D6E4F7"/>
+<circle cx="1470" cy="1585" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1482" y="1589" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">save(): void</text>
+<circle cx="1470" cy="1603" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1482" y="1607" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">delete(): void</text>
+<circle cx="1470" cy="1621" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1482" y="1625" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_lancamento(id): DetalhesMaterialPermanente</text>
+<circle cx="1470" cy="1639" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1482" y="1643" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_by_estado(estado): List~DetalhesMaterialPermanente~</text>
+<circle cx="1470" cy="1657" r="4" fill="#0F6E56" opacity="0.8"/>
+<text x="1482" y="1661" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">get_em_garantia(): List~DetalhesMaterialPermanente~</text>
+<line x1="1050" y1="330" x2="1050" y2="580" stroke="#555555" stroke-width="1.5" stroke-dasharray="7,4" marker-end="url(#arr)"/>
+<rect x="960" y="444" width="181" height="16" rx="3" fill="white" opacity="0.9"/><text x="1050" y="455" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">alimentado por triggers</text>
+<path d="M 1545 510 L 1545 550 L 1050 550 L 1050 580" fill="none" stroke="#555555" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="1235" y="529" width="125" height="16" rx="3" fill="white" opacity="0.9"/><text x="1297" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">1 pertence 0..*</text>
+<line x1="755" y1="779" x2="835" y2="806" stroke="#555555" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="733" y="754" width="125" height="16" rx="3" fill="white" opacity="0.9"/><text x="795" y="765" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">1 cadastra 0..*</text>
+<line x1="1345" y1="734" x2="1265" y2="806" stroke="#555555" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="1236" y="709" width="139" height="16" rx="3" fill="white" opacity="0.9"/><text x="1305" y="720" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">1 classifica 0..*</text>
+<line x1="1050" y1="1033" x2="1050" y2="1093" stroke="#555555" stroke-width="1.5"/>
+<line x1="455" y1="1093" x2="1617" y2="1093" stroke="#555555" stroke-width="1.5"/>
+<line x1="455" y1="1093" x2="455" y2="1153" stroke="#555555" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="421" y="1121" width="69" height="16" rx="3" fill="white" opacity="0.9"/><text x="455" y="1132" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">1..0..1</text>
+<line x1="739" y1="1093" x2="739" y2="1153" stroke="#555555" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="705" y="1121" width="69" height="16" rx="3" fill="white" opacity="0.9"/><text x="739" y="1132" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">1..0..1</text>
+<line x1="1023" y1="1093" x2="1023" y2="1153" stroke="#555555" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="989" y="1121" width="69" height="16" rx="3" fill="white" opacity="0.9"/><text x="1023" y="1132" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">1..0..*</text>
+<line x1="1307" y1="1093" x2="1307" y2="1153" stroke="#555555" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="1273" y="1121" width="69" height="16" rx="3" fill="white" opacity="0.9"/><text x="1307" y="1132" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">1..0..1</text>
+<line x1="1617" y1="1093" x2="1617" y2="1153" stroke="#555555" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="1583" y="1121" width="69" height="16" rx="3" fill="white" opacity="0.9"/><text x="1617" y="1132" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#333">1..0..1</text>
+<rect x="15" y="1698" width="2070" height="110" rx="6" fill="#EBF2FA" stroke="#2E75B6" stroke-width="1.2"/>
+<rect x="15" y="1698" width="2070" height="24" rx="6" fill="#1F3864"/>
+<rect x="15" y="1704" width="2070" height="18" fill="#1F3864"/>
+<text x="1050" y="1714" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">Legenda</text>
+<circle cx="50" cy="1740" r="5" fill="#1a6fba" opacity="0.85"/>
+<text x="63" y="1744" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">Atributo público (+)</text>
+<circle cx="230" cy="1740" r="5" fill="#C00000" opacity="0.85"/>
+<text x="243" y="1744" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">Atributo privado (-)</text>
+<circle cx="410" cy="1740" r="5" fill="#0F6E56" opacity="0.85"/>
+<text x="423" y="1744" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">Método</text>
+<line x1="545" y1="1740" x2="585" y2="1740" stroke="#555555" stroke-width="1.5"  marker-end="url(#arr)"/>
+<text x="595" y="1744" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">Associação direta</text>
+<line x1="730" y1="1740" x2="770" y2="1740" stroke="#555555" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+<text x="780" y="1744" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">Alimentado por triggers (auditoria)</text>
+<rect x="1070" y="1733" width="14" height="14" rx="3" fill="#375623"/>
+<text x="1090" y="1744" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">Somente leitura (auditoria)</text>
+<rect x="50" y="1759" width="136" height="16" rx="4" fill="#1F3864"/>
+<text x="118" y="1770" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white">1 pertence 0..*</text>
+<text x="196" y="1770" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">Um projeto agrupa vários lançamentos</text>
+<rect x="430" y="1759" width="136" height="16" rx="4" fill="#1F3864"/>
+<text x="498" y="1770" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white">1 cadastra 0..*</text>
+<text x="576" y="1770" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">Um usuário pode cadastrar vários lançamentos</text>
+<rect x="860" y="1759" width="72" height="16" rx="4" fill="#1F3864"/>
+<text x="896" y="1770" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white">1..0..1</text>
+<text x="942" y="1770" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">Um lançamento tem no máximo um detalhe</text>
+<rect x="1230" y="1759" width="72" height="16" rx="4" fill="#1F3864"/>
+<text x="1266" y="1770" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white">1..0..*</text>
+<text x="1312" y="1770" font-family="Arial, sans-serif" font-size="11" fill="#1a1a1a">Um lançamento pode ter vários itens de consumo</text>
+</svg>
