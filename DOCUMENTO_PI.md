@@ -86,8 +86,8 @@ https://drive.google.com/file/d/1q825WohvQYjM9-6_NNur6K5mk-l0zBtk/view?usp=shari
 
 | Integrante | Responsabilidades |
 |------------|-------------------|
-| **Jéferson C. Silva** | Configuração do projeto Django, `models.py`, autenticação JWT, endpoints da API REST, banco de dados MySQL, triggers de auditoria, deploy no PythonAnywhere |
-| **Erick Meurer** | Wireframes (wireframe.cc), front-end HTML/CSS/JS, validações de formulário, integração das telas com a API, exportação de relatórios CSV |
+| **Jéferson C. Silva** | Configuração do projeto Django, `models.py`, autenticação JWT, endpoints da API REST, banco de dados MySQL, triggers de auditoria, LGPD, A2F (autenticação em duas etapas), deploy no PythonAnywhere |
+| **Erick Meurer** | Wireframes (wireframe.cc), front-end HTML/CSS/JS, validações de formulário, integração das telas com a API, exportação de relatórios CSV e PDF |
 
 ---
 
@@ -113,10 +113,11 @@ core/                   — Aplicação principal
 
 O sistema utiliza **SimpleJWT** com um modelo de usuário completamente customizado (`Usuario`), sem utilizar o sistema de autenticação padrão do Django. O fluxo é:
 
-1. `POST /api/auth/login/` — valida `login` + `senha` via `check_password()` (hash bcrypt/PBKDF2)
-2. Retorna `access_token` (curta duração) e `refresh_token` (longa duração)
-3. O token carrega claims customizados: `usuario_id`, `login`, `nome`
-4. `POST /api/auth/refresh/` — renova o access token silenciosamente
+1. `POST /api/auth/login/` — valida `login` + `senha` via `check_password()` (hash PBKDF2)
+2. Se A2F estiver ativo: retorna `{requires_2fa: true, pre_token}` (token temporário de 5 min)
+3. Caso contrário: retorna `access_token` (8 horas) e `refresh_token` (1 dia)
+4. O token carrega claims customizados: `usuario_id`, `login`, `nome`
+5. `POST /api/auth/refresh/` — renova o access token silenciosamente
 
 **Classe de autenticação customizada (`SpectreJWTAuthentication`):**
 
@@ -129,7 +130,7 @@ class SpectreJWTAuthentication(JWTAuthentication):
         return usuario
 ```
 
-O front-end implementa refresh transparente: toda requisição que retornar HTTP 401 automaticamente tenta renovar o token antes de redirecionar para o login.
+O front-end implementa refresh transparente: toda requisição que retornar HTTP 401 automaticamente tenta renovar o token antes de redirecionar para o login. Os tokens são armazenados em memória (variáveis JS) — sem `localStorage` para reduzir superfície de ataque XSS.
 
 ### 2.3 Endpoints da API REST
 
@@ -138,6 +139,11 @@ O front-end implementa refresh transparente: toda requisição que retornar HTTP
 | POST | `/api/auth/login/` | Login e geração de tokens | Pública |
 | POST | `/api/auth/refresh/` | Renovação do access token | Pública |
 | POST | `/api/auth/cadastro/` | Cadastro de novo usuário | Pública |
+| POST | `/api/auth/lgpd/aceitar/` | Registro de consentimento LGPD | JWT |
+| POST | `/api/auth/a2f/setup/` | Gera secret TOTP e URI para QR code | JWT |
+| POST | `/api/auth/a2f/confirmar/` | Confirma código e ativa A2F | JWT |
+| POST | `/api/auth/a2f/verificar/` | Verifica código no login com A2F | Pública |
+| POST | `/api/auth/a2f/desativar/` | Desativa A2F com senha + código | JWT |
 | GET/POST | `/api/usuarios/` | Listagem e cadastro de usuários | JWT |
 | GET/PUT/DELETE | `/api/usuarios/{id}/` | Detalhe, edição, exclusão | JWT |
 | GET/POST | `/api/projetos/` | Listagem e cadastro de editais | JWT |
@@ -159,11 +165,11 @@ O front-end implementa refresh transparente: toda requisição que retornar HTTP
 ### 2.4 Serializers e Validações
 
 ```python
-# Exemplo: LancamentoSerializer
+# LancamentoSerializer
 # - Expõe projeto_nome e categoria_nome (read-only via StringRelatedField)
 # - Campos de escrita usam FK inteiros (projeto, categoria)
 
-# Exemplo: UsuarioSerializer
+# UsuarioSerializer
 # - Campo virtual senha (write-only)
 # - create() e update() aplicam make_password() automaticamente
 # - senha_hash nunca é exposta na resposta
@@ -204,10 +210,11 @@ https://drive.google.com/file/d/1A8CLttJXHKpnq2BglCKyvu0YiMxCfSKw/view?usp=drive
 
 **Migrações aplicadas:**
 ```
-0001_initial.py              — Criação das tabelas base
-0002_detalhesmaterialpermanente.py — Tabela de material permanente
-0003_projeto_lancamento_projeto.py — Relacionamento projeto↔lançamento
-0004_lancamento_ativo.py     — Campo de soft-delete
+0001_initial.py                          — Criação das tabelas base
+0002_detalhesmaterialpermanente.py       — Tabela de material permanente
+0003_projeto_lancamento_projeto.py       — Relacionamento projeto↔lançamento
+0004_lancamento_ativo.py                 — Campo de soft-delete
+0005_usuario_lgpd_a2f.py                 — Campos LGPD e A2F no modelo Usuario
 ```
 
 ### 3.3 Triggers de Auditoria
@@ -243,11 +250,11 @@ Os wireframes foram desenvolvidos por Erick Meurer utilizando a plataforma **wir
 
 ### 4.2 Telas Implementadas
 
-O sistema conta com **11 telas/seções** implementadas:
+O sistema conta com **12 telas/seções** implementadas:
 
 | Tela | Descrição |
 |------|-----------|
-| **Login** | Autenticação com validação visual, toggle de senha visível, feedback de erro |
+| **Login** | Autenticação com validação visual, toggle de senha visível, feedback de erro, suporte a A2F |
 | **Dashboard** | Métricas executivas, gráfico de barras (Orçado × Realizado), gráfico de rosca (distribuição), lançamentos recentes |
 | **Lançamentos** | Listagem paginada com filtros por edital, categoria, status e período |
 | **Editais** | Cards de projetos com orçamento, período e status; ações de editar e finalizar |
@@ -257,7 +264,7 @@ O sistema conta com **11 telas/seções** implementadas:
 | **Patrimônio** | Cadastro de material permanente com campos de garantia e conservação |
 | **Serviços** | Cadastro de serviços de terceiros com cálculo de retenção fiscal |
 | **Histórico** | Log de auditoria com todas as alterações do banco de dados |
-| **Configurações** | Gestão de usuários e categorias (exclusivo Administrador/Desenvolvedor) |
+| **Configurações** | Gestão de usuários, categorias e segurança (A2F e LGPD) |
 
 ---
 
@@ -265,10 +272,18 @@ O sistema conta com **11 telas/seções** implementadas:
 
 ### 5.1 Arquitetura Frontend
 
-O front-end é uma **Single Page Application (SPA) em arquivo único** (`spectre_app.html`) sem nenhum framework externo — HTML, CSS e JavaScript puros. A aplicação é aberta diretamente no navegador e consome a API Django em `http://127.0.0.1:8000/api/`.
+O front-end é uma **Single Page Application (SPA) em arquivo único** (`spectre_app.html`) sem nenhum framework externo — HTML, CSS e JavaScript puros. A detecção de ambiente é automática:
+
+```javascript
+const API_BASE = window.location.protocol === 'file:'
+    ? 'http://127.0.0.1:8000/api'   // desenvolvimento local
+    : '/api';                         // produção (servidor web)
+```
 
 **Bibliotecas externas (via CDN):**
 - `Chart.js 4.4.0` — gráficos de barras e rosca no dashboard
+- `jsPDF 2.5.1 + AutoTable 3.8.2` — geração de PDF (carregado sob demanda)
+- `qrcode.js` — QR code para setup do A2F (carregado sob demanda)
 - `Google Fonts` — DM Sans, DM Mono, Playfair Display
 
 ### 5.2 Sistema de Navegação
@@ -282,8 +297,7 @@ Cada página está mapeada para `[título, subtítulo, topbarFn, renderFn]`:
 
 ```javascript
 'lancamentos': ['Lançamentos', '/ Todos os registros', renderTopbarLanc, renderLancamentos]
-'dashboard':   ['Dashboard',   '/ Visão geral',         renderTopbarDash, renderDashboard]
-// ...
+'dashboard':   ['Dashboard',   '/ Visão geral',        renderTopbarDash, renderDashboard]
 ```
 
 ### 5.3 Validações Implementadas
@@ -292,6 +306,7 @@ Cada página está mapeada para `[título, subtítulo, topbarFn, renderFn]`:
 - Campos obrigatórios com feedback visual (borda vermelha + mensagem)
 - Indicador de carregamento no botão
 - Mensagem de erro da API exibida inline
+- Fluxo de segunda etapa (modal A2F) quando ativado
 
 **Validações nos formulários de cadastro:**
 - Campos obrigatórios marcados com `*` e verificados antes do envio
@@ -349,11 +364,9 @@ O sistema adota um design **minimalista e profissional**, inspirado em ferrament
 **Implementado:** Login com `login` + `senha`, geração de JWT com claims customizados, refresh token transparente, logout com limpeza de tokens.
 
 ```
-POST /api/auth/login/    → { access, refresh, usuario: {id, nome, login, papel} }
+POST /api/auth/login/    → { access, refresh, usuario: {id, nome, login, papel, lgpd_aceito_em} }
 POST /api/auth/refresh/  → { access }
 ```
-
-O front-end armazena tokens em memória (variáveis JS) — sem `localStorage` para reduzir superfície de ataque XSS.
 
 ### 6.b) Cadastro de Itens de Custeio e Capital
 
@@ -364,7 +377,7 @@ O front-end armazena tokens em memória (variáveis JS) — sem `localStorage` p
 - **Serviços de Terceiros** — tipo de serviço, prestador (PF/PJ), CPF/CNPJ, contrato, valor bruto, % retenção, valor líquido calculado automaticamente
 
 **Capital implementado:**
-- **Material Permanente** — descrição, marca, modelo, nº série, nº patrimônio, fornecedor, CNPJ, NF, garantia (meses), data de início de garantia calculada automaticamente pelo trigger MySQL, estado de conservação, localização, responsável
+- **Material Permanente** — descrição, marca, modelo, nº série, nº patrimônio, fornecedor, CNPJ, NF, garantia (meses), data de fim de garantia calculada automaticamente pelo trigger MySQL, estado de conservação, localização, responsável
 
 Todos os cadastros de detalhe criam simultaneamente um `Lancamento` (status `REALIZADO`) e o registro específico de detalhe, vinculados por `OneToOneField` (exceto consumo, que usa `ForeignKey` para suportar múltiplos itens por lançamento).
 
@@ -408,105 +421,132 @@ O endpoint `/api/dashboard/resumo/` executa **3 queries otimizadas** e retorna:
 
 **Listagem completa de lançamentos** (tela Lançamentos):
 - Filtros: edital, categoria, status, período
-- Status padrão ao entrar pelo menu: `ORÇADO` (mostra o que está planejado)
-- Status padrão ao entrar de um edital: `Todos`
 - Paginação com 10 itens por página
 
 ### 6.e) Implantação
 
-O sistema está configurado para deploy no **PythonAnywhere**:
+O sistema foi preparado e configurado para deploy no **PythonAnywhere**, com as seguintes adaptações realizadas no código:
 
-**Configurações de produção necessárias:**
+**Configurações implementadas:**
 ```python
-DEBUG = False
-ALLOWED_HOSTS = ['usuario.pythonanywhere.com']
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = ['https://usuario.pythonanywhere.com']
+# settings.py
+TEMPLATES = [{'DIRS': [BASE_DIR], ...}]  # serve o HTML como template Django
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# urls.py
+path('', TemplateView.as_view(template_name='spectre_app.html'))  # rota raiz
+
+# spectre_app.html
+const API_BASE = window.location.protocol === 'file:'
+    ? 'http://127.0.0.1:8000/api'
+    : '/api';  # detecção automática do ambiente
 ```
+
+**Situação do deploy:**
+O deploy no PythonAnywhere foi parcialmente realizado. O código foi publicado no GitHub (`github.com/jefersoncsilva/spectre`) e clonado com sucesso no servidor. As dependências foram instaladas com Python 3.12.
+
+A conclusão do deploy está pendente pela questão do banco de dados: o plano gratuito do PythonAnywhere não inclui MySQL nem permite conexões de saída na porta 3306 (necessária para bancos externos). A solução requer o upgrade para o plano pago (USD 5/mês — Hacker), que inclui MySQL integrado.
 
 **Checklist de deploy:**
-- [ ] Conta no PythonAnywhere criada
-- [ ] Banco MySQL configurado no painel PythonAnywhere
-- [ ] Arquivo `.env` com credenciais do banco de produção
-- [ ] `pip install -r requirements.txt` no ambiente virtual
-- [ ] `python manage.py migrate` executado
-- [ ] Arquivo WSGI configurado apontando para `spectre_project.wsgi`
-- [ ] URL do front-end atualizada para `https://usuario.pythonanywhere.com/api/`
-
-**Dependências (`requirements.txt`):**
-```
-Django==6.0.3
-djangorestframework
-djangorestframework-simplejwt
-django-cors-headers
-mysqlclient
-python-decouple
-```
+- [x] Repositório publicado no GitHub
+- [x] Código clonado no PythonAnywhere
+- [x] Virtualenv Python 3.12 criado
+- [x] Dependências instaladas (`pip install -r requirements.txt`)
+- [x] Arquivo `.env` configurado no servidor
+- [ ] Banco MySQL ativo (pendente — requer plano pago)
+- [ ] `python manage.py migrate` executado no servidor
+- [ ] Arquivo WSGI configurado no painel PythonAnywhere
+- [ ] Triggers de auditoria importados via phpMyAdmin
 
 ### 6.f) Extras e Melhorias
 
 #### API REST
 
-A API REST está completamente implementada e documentada, seguindo os padrões:
+A API REST está completamente implementada, seguindo os padrões:
 - Respostas JSON padronizadas com `{count, next, previous, results}`
 - Códigos HTTP corretos (200, 201, 204, 400, 401, 403, 404)
-- CORS configurado para desenvolvimento (`CORS_ALLOW_ALL_ORIGINS = True`)
 - Proteção JWT em todos os endpoints privados
 
-#### Exportação de Relatórios CSV
+#### Exportação de Relatórios — CSV e PDF
 
-Sistema completo de exportação implementado em todas as telas:
+Sistema completo de exportação em **dois formatos** implementado em todas as telas. O usuário escolhe o formato (CSV ou PDF) no modal de exportação antes de gerar o arquivo.
 
-| Tela | Arquivo gerado | Filtros disponíveis |
-|------|---------------|---------------------|
-| Dashboard | `spectre_dashboard_YYYY-MM-DD.csv` | Edital, Mês, Ano, Seções |
-| Lançamentos | `spectre_lancamentos_YYYY-MM-DD.csv` | Edital, Categoria, Status, Período |
-| Editais | `spectre_editais_YYYY-MM-DD.csv` | Status, Ano |
-| Transporte | `spectre_transporte_YYYY-MM-DD.csv` | Edital, Período |
-| Diárias | `spectre_diarias_YYYY-MM-DD.csv` | Edital, Período |
-| Consumo | `spectre_consumo_YYYY-MM-DD.csv` | Edital, Período |
-| Patrimônio | `spectre_patrimonio_YYYY-MM-DD.csv` | Edital, Período |
-| Serviços | `spectre_servicos_YYYY-MM-DD.csv` | Edital, Período |
+**Cobertura por tela:**
 
-**Formato do arquivo CSV:**
-- Codificação: **UTF-8 com BOM** (compatível com Microsoft Excel, LibreOffice Calc, Google Sheets)
-- Separador: `;` (ponto e vírgula — padrão brasileiro)
-- Cabeçalho institucional com nome do sistema, data/hora de geração, usuário e filtros aplicados
-- Seções separadas com linha em branco
+| Tela | Arquivo CSV gerado | Arquivo PDF gerado |
+|------|-------------------|-------------------|
+| Dashboard | `spectre_dashboard_YYYY-MM-DD.csv` | `spectre_dashboard_YYYY-MM-DD.pdf` |
+| Lançamentos | `spectre_lancamentos_YYYY-MM-DD.csv` | `spectre_lancamentos_YYYY-MM-DD.pdf` |
+| Editais | `spectre_editais_YYYY-MM-DD.csv` | `spectre_editais_YYYY-MM-DD.pdf` |
+| Transporte | `spectre_transporte_YYYY-MM-DD.csv` | `spectre_transporte_YYYY-MM-DD.pdf` |
+| Diárias | `spectre_diarias_YYYY-MM-DD.csv` | `spectre_diarias_YYYY-MM-DD.pdf` |
+| Consumo | `spectre_consumo_YYYY-MM-DD.csv` | `spectre_consumo_YYYY-MM-DD.pdf` |
+| Patrimônio | `spectre_patrimonio_YYYY-MM-DD.csv` | `spectre_patrimonio_YYYY-MM-DD.pdf` |
+| Serviços | `spectre_servicos_YYYY-MM-DD.csv` | `spectre_servicos_YYYY-MM-DD.pdf` |
+
+**Especificações do CSV:**
+- Codificação: UTF-8 com BOM (compatível com Excel, LibreOffice, Google Sheets)
+- Separador: `;` (padrão brasileiro)
+- Cabeçalho institucional com nome do sistema, data/hora, usuário e filtros aplicados
 - Linha de totais ao final de cada seção
 
-**Estrutura do arquivo (exemplo — Dashboard):**
-```
-SPECTRE — Sistema de Controle Financeiro de Projetos de Pesquisa
-Universidade de Santa Cruz do Sul — UNISC · PI Módulo III A · 2026
+**Especificações do PDF:**
+- Gerado no navegador via biblioteca `jsPDF + AutoTable` (sem dependência de servidor)
+- Layout A4 — retrato para Dashboard, paisagem para tabelas
+- Cabeçalho escuro com nome do relatório e filtros aplicados
+- Tabelas zebradas com linha de total em destaque
+- Rodapé com número de página em todas as folhas
+- Cores de status: ORÇADO (dourado), REALIZADO (verde)
 
-Relatório:;Dashboard — Resumo Executivo
-Gerado em:;03/04/2026 às 14:30
-Usuário:;Jéferson Corrêa da Silva
-Filtros aplicados:;Edital: Projeto X | Mês: abril | Ano: 2026
+#### Proteção de Dados — LGPD
 
-RESUMO EXECUTIVO
+O sistema implementa conformidade com a **Lei Geral de Proteção de Dados Pessoais** (Lei nº 13.709/2018):
 
-Indicador;Valor
-Total Orçado;R$ 50.000,00
-Total Realizado;R$ 11.550,00
-Saldo Disponível;R$ 38.450,00
-Taxa de Execução;23,1%
-Lançamentos Orçados (qtd);5
-Lançamentos Realizados (qtd);2
-
-ORÇADO × REALIZADO POR CATEGORIA
-
-Categoria;Orçado (R$);Realizado (R$);Saldo (R$);% Executado
-Diária;R$ 10.000,00;R$ 1.050,00;R$ 8.950,00;10,5%
-Transporte;R$ 10.000,00;R$ 500,00;R$ 9.500,00;5,0%
-...
-TOTAL;R$ 50.000,00;R$ 11.550,00;R$ 38.450,00;23,1%
+**Campos adicionados ao modelo `Usuario`:**
+```python
+lgpd_aceito_em = models.DateTimeField(null=True, blank=True)
+lgpd_ip        = models.GenericIPAddressField(null=True, blank=True)
 ```
 
-#### Rastreabilidade e Auditoria (LGPD)
+**Funcionalidades implementadas:**
+- Modal de consentimento LGPD exibido após o primeiro login (bloqueante — impede uso do sistema até o aceite)
+- Texto completo com direitos do titular (Art. 18), base legal (Art. 7º), finalidade e controlador
+- Registro da data/hora e IP do aceite no banco de dados
+- Endpoint `POST /api/auth/lgpd/aceitar/` que persiste o consentimento
+- Aba "Segurança" em Configurações exibe status e data do consentimento
 
-O sistema implementa rastreabilidade completa de todas as alterações via triggers MySQL, registrando automaticamente quem fez, o quê e quando em cada operação. A tabela `historico_alteracoes` é acessível na tela **Histórico** e exportável. Isso atende parcialmente os requisitos de rastreabilidade da LGPD (Lei Geral de Proteção de Dados — Lei nº 13.709/2018).
+**Rastreabilidade automática:**
+Adicionalmente, os 18 triggers MySQL registram automaticamente todas as alterações na tabela `historico_alteracoes`, atendendo ao princípio de rastreabilidade e responsabilização da LGPD.
+
+#### Autenticação em Duas Etapas — A2F (TOTP)
+
+O sistema implementa autenticação em duas etapas baseada em **TOTP** (Time-based One-Time Password), compatível com Google Authenticator e Authy, utilizando a biblioteca `pyotp`.
+
+**Campos adicionados ao modelo `Usuario`:**
+```python
+totp_secret = models.CharField(max_length=32, null=True, blank=True)
+a2f_ativo   = models.BooleanField(default=False)
+```
+
+**Fluxo de login com A2F ativo:**
+```
+1. POST /api/auth/login/  → { requires_2fa: true, pre_token }  (JWT 5 min)
+2. Usuário insere código TOTP de 6 dígitos no modal
+3. POST /api/auth/a2f/verificar/  → { access, refresh, usuario }
+4. Sistema continua normalmente
+```
+
+**Fluxo de ativação (aba Segurança → Configurações):**
+```
+1. POST /api/auth/a2f/setup/     → { uri, secret }
+2. Frontend gera QR code via qrcode.js (sem enviar o secret a servidores externos)
+3. Usuário escaneia com autenticador
+4. POST /api/auth/a2f/confirmar/ → valida código e ativa A2F
+```
+
+**Desativação:**
+- Requer confirmação com senha + código TOTP atual
+- `POST /api/auth/a2f/desativar/`
 
 ---
 
@@ -516,14 +556,14 @@ O sistema SPECTRE foi desenvolvido com foco em três pilares:
 
 1. **Funcionalidade completa** — Cobre todo o ciclo de vida financeiro de um projeto de pesquisa: orçamento, execução, controle e prestação de contas.
 
-2. **Qualidade técnica** — API REST bem estruturada, autenticação por token JWT, auditoria automática via triggers MySQL, cache de dashboard, design responsivo e validações client-side robustas.
+2. **Qualidade técnica** — API REST bem estruturada, autenticação JWT com suporte a A2F/TOTP, conformidade LGPD, auditoria automática via triggers MySQL, cache de dashboard, exportação em CSV e PDF, design responsivo e validações client-side robustas.
 
-3. **Usabilidade** — Interface minimalista e intuitiva, com controle de acesso por papel, filtros contextuais, exportação de relatórios organizados e feedback visual em todas as ações.
+3. **Usabilidade** — Interface minimalista e intuitiva, com controle de acesso por papel, filtros contextuais, relatórios prontos para uso sem ajuste de colunas, e feedback visual em todas as ações.
 
-O código-fonte completo está disponível no arquivo ZIP entregue junto a este documento, contendo:
+O código-fonte completo está disponível no repositório GitHub (`github.com/jefersoncsilva/spectre`) e no arquivo ZIP entregue junto a este documento, contendo:
 - `spectre_project/` — Configuração Django
-- `core/` — Aplicação principal (models, views, serializers, urls)
+- `core/` — Aplicação principal (models, views, serializers, urls, authentication, signals)
 - `spectre_app.html` — Front-end SPA completo
 - `requirements.txt` — Dependências Python
-- `.env.example` — Exemplo de configuração de ambiente
-- Script SQL de criação do banco de dados
+- `DEPLOY_PYTHONANYWHERE.md` — Guia de deploy
+- Script SQL de criação do banco de dados e triggers
