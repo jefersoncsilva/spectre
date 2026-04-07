@@ -1,6 +1,7 @@
 # Sensível — NUNCA versionar
 .env
 .claude/
+dados-aiven.txt
 
 # Python
 __pycache__/
