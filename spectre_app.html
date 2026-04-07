@@ -600,7 +600,7 @@ tr:hover td{background:#FAFBFC;}
 // SPECTRE — Integração com API Django REST
 // ══════════════════════════════════════════════════════════════
 
-const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:8000/api' : '/api';
+const API_BASE = window.location.protocol === 'file:' ? 'https://spectre-spao.onrender.com/api' : '/api';
 
 let _accessToken   = null;
 let _refreshToken  = null;
@@ -2784,7 +2784,11 @@ async function salvarConsumo(detId, lancId) {
         if (lancId) {
             const existing = await get(`/lancamentos/${lancId}/`);
             await put(`/lancamentos/${lancId}/`, {...existing, ...baseData});
-            if (detId) await put(`/detalhes/consumo/${detId}/`, { lancamento: lancId, ..._consumoItems[0] });
+            if (detId) {
+                const editPayload = { lancamento: lancId, ..._consumoItems[0] };
+                if (!editPayload.data_compra) editPayload.data_compra = null;
+                await put(`/detalhes/consumo/${detId}/`, editPayload);
+            }
         } else {
             if (!proj) { errEl.textContent='Selecione um edital.'; errEl.style.display='block'; return; }
             detState.filtEdital = proj;
@@ -2796,7 +2800,9 @@ async function salvarConsumo(detId, lancId) {
                 descricao_item: baseData.descricao_item,
             });
             for (const item of _consumoItems) {
-                await post('/detalhes/consumo/', { lancamento: lanc.id, ...item });
+                const payload = { lancamento: lanc.id, ...item };
+                if (!payload.data_compra) payload.data_compra = null;
+                await post('/detalhes/consumo/', payload);
             }
         }
         closeModal('modal-consumo');
